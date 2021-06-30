@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.8'
 
 services:
 
@@ -6,7 +6,7 @@ services:
     container_name: crdb-0
     hostname: crdb-0
     image: cockroachdb/cockroach:latest
-    command: start-single-node --cluster-name=oltpbench2 --logtostderr=WARNING --log-file-verbosity=WARNING --insecure --max-sql-memory=4GB
+    command: start --cluster-name=oltpbench2 --logtostderr=WARNING --log-file-verbosity=WARNING --insecure --max-sql-memory=4GB --join=crdb-0
 
   crdb-1:
     container_name: crdb-1
@@ -34,7 +34,7 @@ services:
       - "8081:8081"
     environment:
       - NODES=crdb-0 crdb-1 crdb-2
-    links:
+    depends_on:
       - crdb-0
       - crdb-1
       - crdb-2
@@ -44,8 +44,9 @@ services:
     hostname: crdb-init
     image: timveil/cockroachdb-remote-client:latest
     environment:
-      - COCKROACH_HOST=lb:26257
+      - COCKROACH_HOST=crdb-0:26257
       - COCKROACH_INSECURE=true
       - DATABASE_NAME=oltpbench
+      - COCKROACH_INIT=true
     depends_on:
       - lb
