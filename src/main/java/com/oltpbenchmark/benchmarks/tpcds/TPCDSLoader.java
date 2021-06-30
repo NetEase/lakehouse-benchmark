@@ -428,7 +428,7 @@ public class TPCDSLoader extends Loader<TPCDSBenchmark> {
     private String getFileFormat() {
         String format = workConf.getXmlConfig().getString("fileFormat");
             /*
-               Previouse configuration migh not have a fileFormat and assume
+               Previous configuration might not have a fileFormat and assume
                 that the files are csv.
             */
         if (format == null) {
@@ -436,7 +436,7 @@ public class TPCDSLoader extends Loader<TPCDSBenchmark> {
         }
 
         if ((!"csv".equals(format) && !"tbl".equals(format) && !"dat".equals(format))) {
-            throw new IllegalArgumentException("Configuration doesent"
+            throw new IllegalArgumentException("Configuration doesn't"
                     + " have a valid fileFormat");
         }
         return format;

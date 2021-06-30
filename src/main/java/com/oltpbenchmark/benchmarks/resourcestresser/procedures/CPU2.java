@@ -55,7 +55,7 @@ public class CPU2 extends Procedure {
                     try {
                         Thread.sleep(sleepLength);
                     } catch (InterruptedException e) {
-                        throw new SQLException("Unexpected interupt while sleeping!");
+                        throw new SQLException("Unexpected interrupt while sleeping!");
                     }
                 }
             }

@@ -154,7 +154,7 @@ public abstract class JSONUtil {
     }
 
     /**
-     * Load in a JSONSerialable stored in a file
+     * Load in a JSONSerializable stored in a file
      *
      * @param object
      * @param input_path
@@ -436,7 +436,7 @@ public abstract class JSONUtil {
             if (explicit_field_class != null) {
                 field_class = explicit_field_class;
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Found explict field class {} for {}", field_class.getSimpleName(), json_key);
+                    LOG.debug("Found explicit field class {} for {}", field_class.getSimpleName(), json_key);
                 }
             }
             if (LOG.isDebugEnabled()) {
@@ -467,7 +467,7 @@ public abstract class JSONUtil {
         for (Field field_handle : fields) {
             String json_key = field_handle.getName().toUpperCase();
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Retreiving value for field '{}'", json_key);
+                LOG.debug("Retrieving value for field '{}'", json_key);
             }
 
             if (!json_object.has(json_key)) {

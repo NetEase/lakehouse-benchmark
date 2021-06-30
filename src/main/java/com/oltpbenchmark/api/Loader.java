@@ -94,7 +94,7 @@ public abstract class Loader<T extends BenchmarkModule> {
 
 
     /**
-     * Method that can be overriden to specifically unload the tables of the
+     * Method that can be overridden to specifically unload the tables of the
      * database. In the default implementation it checks for tables from the
      * catalog to delete them using SQL. Any subclass can inject custom behavior
      * here.

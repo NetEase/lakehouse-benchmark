@@ -270,7 +270,7 @@ public class RandomDistribution {
          * Constructor
          *
          * @param r     The random number generator.
-         * @param min   minimum integer (inclusvie)
+         * @param min   minimum integer (inclusive)
          * @param max   maximum integer (exclusive)
          * @param sigma parameter sigma. (sigma > 1.0)
          */
@@ -282,7 +282,7 @@ public class RandomDistribution {
          * Constructor.
          *
          * @param r       The random number generator.
-         * @param min     minimum integer (inclusvie)
+         * @param min     minimum integer (inclusive)
          * @param max     maximum integer (exclusive)
          * @param sigma   parameter sigma. (sigma > 1.0)
          * @param epsilon Allowable error percentage (0 < epsilon < 1.0).

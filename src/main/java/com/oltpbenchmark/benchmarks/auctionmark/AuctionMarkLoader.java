@@ -54,7 +54,7 @@ public class AuctionMarkLoader extends Loader<AuctionMarkBenchmark> {
     protected final AuctionMarkProfile profile;
 
     /**
-     * Data Generator Classes TableName -> AbstactTableGenerator
+     * Data Generator Classes TableName -> AbstractTableGenerator
      */
     private final Map<String, AbstractTableGenerator> generators = Collections.synchronizedMap(new ListOrderedMap<>());
 

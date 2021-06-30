@@ -259,7 +259,7 @@ public class OrderStatus extends TPCCProcedure {
         }
     }
 
-    // attention this code is repeated in other transacitons... ok for now to
+    // attention this code is repeated in other transactions... ok for now to
     // allow for separate statements.
     public Customer getCustomerByName(int c_w_id, int c_d_id, String c_last, Connection conn) throws SQLException {
         ArrayList<Customer> customers = new ArrayList<>();

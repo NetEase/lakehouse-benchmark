@@ -67,7 +67,7 @@ public class Histogram<X extends Comparable<X>> implements JSONSerializable {
 
     /**
      * The Min/Max counts are the values that have the smallest/greatest number of
-     * occurences in the histogram
+     * occurrences in the histogram
      */
     protected int min_count = 0;
     protected List<X> min_count_values;
@@ -438,7 +438,7 @@ public class Histogram<X extends Comparable<X>> implements JSONSerializable {
 
     /**
      * Returns the current count for the given value.
-     * If that value was nevered entered in the histogram, then the value returned will be value_if_null
+     * If that value was never entered in the histogram, then the value returned will be value_if_null
      *
      * @param value
      * @param value_if_null

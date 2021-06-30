@@ -44,11 +44,11 @@ public class ResourceStresserWorker extends Worker<ResourceStresserBenchmark> {
     public static final int IO2_howManyUpdatePerTransaction = 50;
     public static final boolean IO2_makeSureWorketSetFitsInMemory = true;
 
-    public static final int CPU1_howManyPerTrasaction = 10;
+    public static final int CPU1_howManyPerTransaction = 10;
     public static final int CPU1_sleep = 1;
     public static final int CPU1_nestedLevel = 5;
 
-    public static final int CPU2_howManyPerTrasaction = 5;
+    public static final int CPU2_howManyPerTransaction = 5;
     public static final int CPU2_sleep = 2;
     public static final int CPU2_nestedLevel = 5;
 
@@ -67,9 +67,9 @@ public class ResourceStresserWorker extends Worker<ResourceStresserBenchmark> {
     @Override
     protected TransactionStatus executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
         if (nextTrans.getProcedureClass().equals(CPU1.class)) {
-            cpu1Transaction(conn, CPU1_howManyPerTrasaction, CPU1_sleep, CPU1_nestedLevel);
+            cpu1Transaction(conn, CPU1_howManyPerTransaction, CPU1_sleep, CPU1_nestedLevel);
         } else if (nextTrans.getProcedureClass().equals(CPU2.class)) {
-            cpu2Transaction(conn, CPU2_howManyPerTrasaction, CPU2_sleep, CPU2_nestedLevel);
+            cpu2Transaction(conn, CPU2_howManyPerTransaction, CPU2_sleep, CPU2_nestedLevel);
         } else if (nextTrans.getProcedureClass().equals(IO1.class)) {
             io1Transaction(conn, IO1_howManyColsPerRow, IO1_howManyRowsPerUpdate, IO1_howManyUpdatePerTransaction, keyRange);
         } else if (nextTrans.getProcedureClass().equals(IO2.class)) {
