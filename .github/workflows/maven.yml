@@ -54,12 +54,15 @@ jobs:
 #      - name: Display structure of downloaded files
 #        run: ls -R
 
-      - name: Extract artifact
+      - name: extract artifact
         run: |
           tar xvzf oltpbench2-*.tgz --strip-components=1
+
+      - name: delete artifact
+        run: |
           rm -rf oltpbench2-*.tgz
 
-#      - name: Display structure of downloaded files AGAIN
+#      - name: Display structure of extracted files
 #        run: ls -R
 
       - name: AuctionMark
