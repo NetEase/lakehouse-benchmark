@@ -27,12 +27,18 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
+    - uses: actions/upload-artifact@v2
+      with:
+        name: oltpbench2
+        path: target/*.tgz
+        retention-days: 1
+
   test-cockroachdb:
 
     needs: build
     runs-on: ubuntu-latest
     env:
-      WORKING_DIRECTORY: /target/extracted
+      WORKING_DIRECTORY: /extracted
 
     services:
       cockroach: # https://hub.docker.com/repository/docker/timveil/cockroachdb-single-node
@@ -43,11 +49,14 @@ jobs:
           - 26257:26257
 
     steps:
-      - name: Extract TGZ artifact
-        working-directory: target
+      - uses: actions/download-artifact@v2
+        with:
+          name: oltpbench2
+
+      - name: Extract artifact
         run: |
-          mkdir -p /target/extracted
-          tar xvzf *.tgz -C /target/extracted/ --strip-components=1
+          tar xvzf oltpbench2.tgz --strip-components=1
+          ls -R
 
       - name: AuctionMark
         working-directory: $WORKING_DIRECTORY
