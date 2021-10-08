@@ -53,10 +53,12 @@ jobs:
         with:
           name: oltpbench2
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
       - name: Extract artifact
         run: |
           tar xvzf oltpbench2.tgz --strip-components=1
-          ls -R
 
       - name: AuctionMark
         working-directory: $WORKING_DIRECTORY
