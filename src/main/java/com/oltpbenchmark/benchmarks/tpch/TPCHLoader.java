@@ -336,7 +336,7 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
     private String getFileFormat() {
         String format = workConf.getXmlConfig().getString("fileFormat");
             /*
-               Previous configuration migh not have a fileFormat and assume
+               Previous configuration might not have a fileFormat and assume
                 that the files are csv.
             */
         if (format == null) {
