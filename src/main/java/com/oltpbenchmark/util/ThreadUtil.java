@@ -136,8 +136,11 @@ public abstract class ThreadUtil {
         @Override
         public void run() {
             Thread.currentThread().setUncaughtExceptionHandler(this.handler);
-            this.r.run();
-            this.latch.countDown();
+            try {
+                this.r.run();
+            } finally {
+                this.latch.countDown();
+            }
         }
     }
 
