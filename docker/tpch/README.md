@@ -11,7 +11,7 @@ docker build --no-cache --build-arg VERSION=2.18.0_rc2 -t tpch:latest .
 
 Execute this command to run `dbgen` with the provided `SCALE`. This will place the resulting `.tbl` files in a subdirectory called `output`
 ```
-docker run --rm -t -e SCALE=.1 -v ${PWD}/output:/opt/tpch-output tpch:latest
+docker run --rm -t -e SCALE=.01 -v ${PWD}/output:/opt/tpch-output tpch:latest
 ```
 
 The resulting `.tbl` files can then be placed in `./data/tpch` to be used during benchmark execution.  Some small starter files are already present in that directory.
