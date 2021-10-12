@@ -125,7 +125,7 @@ public class DBWorkload {
             wrkld.setUsername(xmlConfig.getString("username"));
             wrkld.setPassword(xmlConfig.getString("password"));
             wrkld.setBatchSize(xmlConfig.getInt("batchsize", 128));
-            wrkld.setPoolSize(xmlConfig.getInt("poolsize", 12));
+            wrkld.setPoolSize(xmlConfig.getInt("poolsize", ThreadUtil.availableProcessors() * 2));
             wrkld.setMaxRetries(xmlConfig.getInt("retries", 3));
 
             int terminals = xmlConfig.getInt("terminals[not(@bench)]", 0);
