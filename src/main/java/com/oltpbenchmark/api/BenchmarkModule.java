@@ -226,9 +226,10 @@ public abstract class BenchmarkModule {
 
                 /*
                 there is a situation where the createLoaderThreads() creates more threads than maxConcurrent.
-                 Some of the scenarios involve cascading countdown latches where, when running on small core count boxes, the maxconncurrent is not sufficient enough to progess the workload.
-                 in other words, the entire loadDatabase is halted because there are no more threads available to satisfy the waiting countdown latches.  i think a more reasonable solution here is to
-                 set the max concurrent threads to always greater or equal to loader threads
+                 Some of the scenarios involve cascading countdown latches where, when running on small core count boxes, the maxConcurrent is not sufficient enough to progress the workload.
+                 in other words, the entire loadDatabase is halted because there are no more threads available to satisfy the waiting countdown latches.
+                 this is particularly obvious with the TPCH loader running during CI/CD in github actions whose machines have only 2 cores. i think a more reasonable solution here is to
+                 set the max concurrent threads to always greater or equal to loader threads.
 
 
                  */

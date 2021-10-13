@@ -152,20 +152,13 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
         threads.add(new LoaderThread(this.benchmark) {
             @Override
             public void load(Connection conn) throws SQLException {
-
-                LOG.debug("starting insert into customer");
                 try (PreparedStatement statement = conn.prepareStatement("INSERT INTO customer " + "(c_custkey, c_name, c_address, c_nationkey," + " c_phone, c_acctbal, c_mktsegment, c_comment ) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
-
                     loadTable(conn, statement, "Customer", customerTypes);
                 }
-                LOG.debug("finished insert into customer");
             }
 
             @Override
             public void beforeLoad() {
-
-                LOG.debug("waiting on nation latch before inserting into customer");
-
                 try {
                     nationLatch.await();
                 } catch (InterruptedException e) {
@@ -183,19 +176,13 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
         threads.add(new LoaderThread(this.benchmark) {
             @Override
             public void load(Connection conn) throws SQLException {
-                LOG.debug("starting insert into lineitem");
                 try (PreparedStatement statement = conn.prepareStatement("INSERT INTO lineitem " + "(l_orderkey, l_partkey, l_suppkey, l_linenumber," + " l_quantity, l_extendedprice, l_discount, l_tax," + " l_returnflag, l_linestatus, l_shipdate, l_commitdate," + " l_receiptdate, l_shipinstruct, l_shipmode, l_comment) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-
                     loadTable(conn, statement, "LineItem", lineitemTypes);
                 }
-                LOG.debug("finished insert into lineitem");
             }
 
             @Override
             public void beforeLoad() {
-
-                LOG.debug("waiting on orders and partsSupp latch before inserting into lineitem");
-
                 try {
                     ordersLatch.await();
                     partsSuppLatch.await();
@@ -209,19 +196,13 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
         threads.add(new LoaderThread(this.benchmark) {
             @Override
             public void load(Connection conn) throws SQLException {
-                LOG.debug("starting insert into nation");
                 try (PreparedStatement statement = conn.prepareStatement("INSERT INTO nation " + "(n_nationkey, n_name, n_regionkey, n_comment) " + "VALUES (?, ?, ?, ?)")) {
-
                     loadTable(conn, statement, "Nation", nationTypes);
                 }
-                LOG.debug("finished insert into nation");
             }
 
             @Override
             public void beforeLoad() {
-
-                LOG.debug("waiting on region latch before inserting into nation");
-
                 try {
                     regionLatch.await();
                 } catch (InterruptedException e) {
@@ -239,18 +220,13 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
         threads.add(new LoaderThread(this.benchmark) {
             @Override
             public void load(Connection conn) throws SQLException {
-                LOG.debug("starting insert into orders");
                 try (PreparedStatement statement = conn.prepareStatement("INSERT INTO orders " + "(o_orderkey, o_custkey, o_orderstatus, o_totalprice," + " o_orderdate, o_orderpriority, o_clerk, o_shippriority," + " o_comment) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-
                     loadTable(conn, statement, "orders", ordersTypes);
                 }
-                LOG.debug("finished insert into orders");
             }
 
             @Override
             public void beforeLoad() {
-                LOG.debug("waiting on customer latch before inserting into orders");
-
                 try {
                     customerLatch.await();
                 } catch (InterruptedException e) {
@@ -268,14 +244,9 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
         threads.add(new LoaderThread(this.benchmark) {
             @Override
             public void load(Connection conn) throws SQLException {
-
-                LOG.debug("starting insert into part");
                 try (PreparedStatement statement = conn.prepareStatement("INSERT INTO part " + "(p_partkey, p_name, p_mfgr, p_brand, p_type," + " p_size, p_container, p_retailprice, p_comment) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-
                     loadTable(conn, statement, "part", partTypes);
                 }
-                LOG.debug("finished insert into part");
-
             }
 
             @Override
@@ -288,17 +259,13 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
         threads.add(new LoaderThread(this.benchmark) {
             @Override
             public void load(Connection conn) throws SQLException {
-                LOG.debug("starting insert into partsupp");
                 try (PreparedStatement statement = conn.prepareStatement("INSERT INTO partsupp " + "(ps_partkey, ps_suppkey, ps_availqty, ps_supplycost," + " ps_comment) " + "VALUES (?, ?, ?, ?, ?)")) {
-
                     loadTable(conn, statement, "partsupp", partsuppTypes);
                 }
-                LOG.debug("finished insert into partsupp");
             }
 
             @Override
             public void beforeLoad() {
-                LOG.debug("waiting on parts latch and supplier latch before inserting into partsupp");
                 try {
                     partsLatch.await();
                     supplierLatch.await();
@@ -317,12 +284,9 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
         threads.add(new LoaderThread(this.benchmark) {
             @Override
             public void load(Connection conn) throws SQLException {
-                LOG.debug("starting insert into region");
                 try (PreparedStatement statement = conn.prepareStatement("INSERT INTO region " + " (r_regionkey, r_name, r_comment) " + "VALUES (?, ?, ?)")) {
-
                     loadTable(conn, statement, "Region", regionTypes);
                 }
-                LOG.debug("finished insert into region");
             }
 
             @Override
@@ -335,18 +299,13 @@ public class TPCHLoader extends Loader<TPCHBenchmark> {
         threads.add(new LoaderThread(this.benchmark) {
             @Override
             public void load(Connection conn) throws SQLException {
-
-                LOG.debug("starting insert into supplier");
                 try (PreparedStatement statement = conn.prepareStatement("INSERT INTO supplier " + "(s_suppkey, s_name, s_address, s_nationkey, s_phone," + " s_acctbal, s_comment) " + "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
-
                     loadTable(conn, statement, "Supplier", supplierTypes);
                 }
-                LOG.debug("finished insert into supplier");
             }
 
             @Override
             public void beforeLoad() {
-                LOG.debug("waiting on nation latch before inserting into supplier");
                 try {
                     nationLatch.await();
                 } catch (InterruptedException e) {
