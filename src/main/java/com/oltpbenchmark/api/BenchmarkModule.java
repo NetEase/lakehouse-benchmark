@@ -235,7 +235,7 @@ public abstract class BenchmarkModule {
                  */
 
                 if (maxConcurrent < loaderThreadCount) {
-                    LOG.warn("this loader requires {} threads but the current max concurrent count is {}.  given that some loaders enforce order thru CountdownLatches, this may cause issues!  Will set these values to the same.");
+                    LOG.warn("this loader requires {} threads but the current max concurrent count is {}.  given that some loaders enforce order thru CountdownLatches, this may cause issues!  Will set these values to the same.", loaderThreadCount, maxConcurrent);
                     maxConcurrent = loaderThreadCount;
                 }
 
