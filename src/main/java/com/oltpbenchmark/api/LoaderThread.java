@@ -42,6 +42,7 @@ public abstract class LoaderThread implements Runnable {
     public final void run() {
         beforeLoad();
         try (Connection conn = benchmarkModule.getConnection()) {
+            LOG.debug("opened connection in run()");
             load(conn);
         } catch (SQLException ex) {
             SQLException next_ex = ex.getNextException();
