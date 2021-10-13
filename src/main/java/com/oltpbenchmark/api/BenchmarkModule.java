@@ -91,13 +91,7 @@ public abstract class BenchmarkModule {
      * @throws SQLException
      */
     public final Connection getConnection() throws SQLException {
-        LOG.debug("trying to get connection...");
-
-        Connection connection = dataSource.getConnection();
-
-        LOG.debug("got the connection...");
-
-        return connection;
+        return dataSource.getConnection();
     }
 
     // --------------------------------------------------------------------------
