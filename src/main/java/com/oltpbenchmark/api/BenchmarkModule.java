@@ -221,10 +221,25 @@ public abstract class BenchmarkModule {
                 // both. So if createLoaderThreads() returns null, we will use the old load()
                 // method.
                 List<? extends LoaderThread> loaderThreads = loader.createLoaderThreads();
+                int loaderThreadCount = loaderThreads.size();
                 int maxConcurrent = workConf.getLoaderThreads();
 
+                /*
+                there is a situation where the createLoaderThreads() creates more threads than maxConcurrent.
+                 Some of the scenarios involve cascading countdown latches where, when running on small core count boxes, the maxconncurrent is not sufficient enough to progess the workload.
+                 in other words, the entire loadDatabase is halted because there are no more threads available to satisfy the waiting countdown latches.  i think a more reasonable solution here is to
+                 set the max concurrent threads to always greater or equal to loader threads
+
+
+                 */
+
+                if (maxConcurrent < loaderThreadCount) {
+                    LOG.warn("this loader requires {} threads but the current max concurrent count is {}.  given that some loaders enforce order thru CountdownLatches, this may cause issues!  Will set these values to the same.");
+                    maxConcurrent = loaderThreadCount;
+                }
+
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(String.format("Starting %d %s.LoaderThreads [maxConcurrent=%d]", loaderThreads.size(), loader.getClass().getSimpleName(), maxConcurrent));
+                    LOG.debug(String.format("Starting %d %s.LoaderThreads [maxConcurrent=%d]", loaderThreadCount, loader.getClass().getSimpleName(), maxConcurrent));
                 }
 
                 ThreadUtil.runNewPool(loaderThreads, maxConcurrent);
