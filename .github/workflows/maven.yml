@@ -65,6 +65,12 @@ jobs:
 #      - name: Display structure of extracted files
 #        run: ls -R
 
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
       - name: AuctionMark
         run: |
           java -jar oltpbench2.jar -b auctionmark -c config/cockroachdb/sample_auctionmark_config.xml --create=true --load=true --execute=true
