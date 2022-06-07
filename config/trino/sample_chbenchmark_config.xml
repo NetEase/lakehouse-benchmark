@@ -2,11 +2,11 @@
 <parameters>
 
     <!-- Connection details -->
-    <type>MYSQL</type>
-    <driver>com.mysql.cj.jdbc.Driver</driver>
-    <url>jdbc:mysql://sloth-test1.dg.163.org:3331/benCHmark?rewriteBatchedStatements=true</url>
-    <username>rds</username>
-    <password>123456</password>
+    <type>TRINO</type>
+    <driver>io.trino.jdbc.TrinoDriver</driver>
+    <url>jdbc:trino://localhost:8080/arctic/tpch</url>
+    <username>benchmark</username>
+<!--    <password>benchmark</password>-->
     <isolation>TRANSACTION_SERIALIZABLE</isolation>
     <batchsize>128</batchsize>
 
@@ -36,7 +36,7 @@
 
             <!-- Need to Specify transaction weights for each workload .. Otherwise the number of fields won't match -->
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmark">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
 
         <!-- Extra features showcase -->
@@ -44,15 +44,15 @@
             <time>10</time>
 
             <rate>200</rate>
-            <rate bench="chbenchmark">disabled</rate>
+            <rate bench="chbenchmarkForTrino">disabled</rate>
 
             <!-- NOTE: TPCC workers won't be distributed evenly between warehouses if not all workers are active -->
             <active_terminals>1</active_terminals>
-            <active_terminals bench="chbenchmark">1</active_terminals>
+            <active_terminals bench="chbenchmarkForTrino">1</active_terminals>
 
             <!-- Specifies transaction weight for each workload. -->
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmark">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
 
         <!-- Extra features -->
@@ -60,16 +60,16 @@
             <time>10</time>
 
             <rate>100</rate>
-            <rate bench="chbenchmark">unlimited</rate>
+            <rate bench="chbenchmarkForTrino">unlimited</rate>
 
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmark">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
     </works>
 
 
     <!-- CH specific -->
-    <transactiontypes bench="chbenchmark">
+    <transactiontypes bench="chbenchmarkForTrino">
         <transactiontype>
             <name>Q1</name>
         </transactiontype>
