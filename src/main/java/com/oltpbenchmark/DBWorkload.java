@@ -360,7 +360,7 @@ public class DBWorkload {
             for (Phase p : wrkld.getPhases()) {
                 j++;
                 if (p.getWeightCount() != numTxnTypes) {
-                    LOG.error(String.format("Configuration files is inconsistent, phase %d contains %d weights but you defined %d transaction types", j, p.getWeightCount(),numTxnTypes));
+                    LOG.error(String.format("Configuration files is inconsistent, phase %d contains %d weights but you defined %d transaction types", j, p.getWeightCount(), numTxnTypes));
                     if (p.isSerial()) {
                         LOG.error("However, note that since this a serial phase, the weights are irrelevant (but still must be included---sorry).");
                     }
@@ -563,6 +563,9 @@ public class DBWorkload {
 
         for (TransactionType t : activeTXTypes) {
             String fileName = baseFileName + ".results." + t.getName() + ".csv";
+            if (t.getName().equals("NewOrder")) {
+                LOG.info("====== tmpC: {} ======", r.calculateTPCCtmpC(windowSize, t));
+            }
             try (PrintStream ps = new PrintStream(new File(FileUtil.joinPath(outputDirectory, fileName)))) {
                 r.writeCSV(windowSize, ps, t);
             }
