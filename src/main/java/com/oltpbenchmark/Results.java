@@ -115,6 +115,16 @@ public final class Results {
         }
     }
 
+    public double calculateTPCCtmpC(int windowSizeSeconds, TransactionType txType) {
+        int i = 0, sum = 0;
+        for (DistributionStatistics s : new TimeBucketIterable(latencySamples, windowSizeSeconds, txType)) {
+            sum += s.getCount();
+//            out.printf("%d,%.3f\n", i * windowSizeSeconds, (double) s.getCount() / windowSizeSeconds);
+            i += 1;
+        }
+        return (double) sum * 60 / (i * windowSizeSeconds);
+    }
+
     public void writeCSV2(PrintStream out) {
         writeCSV2(1, out, TransactionType.INVALID);
     }
