@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 
 public class History {
 
+    public int h_add_pri_id;
     public int h_c_id;
     public int h_c_d_id;
     public int h_c_w_id;

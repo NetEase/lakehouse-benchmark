@@ -4,18 +4,19 @@
     <!-- Connection details -->
     <type>MYSQL</type>
     <driver>com.mysql.cj.jdbc.Driver</driver>
-    <url>jdbc:mysql://sloth-test1.dg.163.org:3331/benchmark1w2?rewriteBatchedStatements=true</url>
+    <url>jdbc:mysql://sloth-test1.dg.163.org:3331/test2w?rewriteBatchedStatements=true</url>
+<!--    <url>jdbc:mysql://hz11-trino-arctic-0.jd.163.org:3306/icebergdb10w?rewriteBatchedStatements=true</url>-->
     <username>rds</username>
     <password>123456</password>
     <isolation>TRANSACTION_REPEATABLE_READ</isolation>
     <batchsize>128</batchsize>
 
     <!-- Scale factor is the number of warehouses in TPCC -->
-    <scalefactor>10</scalefactor>
+    <scalefactor>2</scalefactor>
 
     <!-- The workload -->
     <!-- Number of terminal per workload -->
-    <terminals>32</terminals>
+    <terminals>4</terminals>
 
     <!-- Extra Features (Commented Out) -->
     <!-- Can be workload-specific -->
@@ -26,10 +27,9 @@
     <!-- <terminals bench="chbenchmark">2</terminals> -->
 
     <works>
-
         <work>
             <!--            需要测试至少10min左右-->
-            <time>360</time>
+            <time>1800</time>
 
 <!--            <rate bench="tpcc">2000</rate>-->
             <rate bench="tpcc">unlimited</rate>

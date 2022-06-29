@@ -345,6 +345,7 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
     protected void loadCustomers(Connection conn, int w_id, int districtsPerWarehouse, int customersPerDistrict) {
 
         int k = 0;
+        int h_add_pri_num = 1;
 
         Customer customer = new Customer();
         History history = new History();
@@ -392,14 +393,16 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
                     customer.c_middle = "OE";
                     customer.c_data = TPCCUtil.randomStr(TPCCUtil.randomNumber(300, 500, benchmark.rng()));
 
+                    history.h_add_pri_id = h_add_pri_num;
+                    history.h_w_id = w_id;
+                    history.h_c_w_id = w_id;
                     history.h_c_id = c;
                     history.h_c_d_id = d;
-                    history.h_c_w_id = w_id;
                     history.h_d_id = d;
-                    history.h_w_id = w_id;
                     history.h_date = sysdate;
                     history.h_amount = 10;
                     history.h_data = TPCCUtil.randomStr(TPCCUtil.randomNumber(10, 24, benchmark.rng()));
+                    h_add_pri_num++;
 
                     k = k + 2;
                     int idx = 1;
@@ -427,6 +430,7 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
                     custPrepStmt.addBatch();
 
                     idx = 1;
+                    histPrepStmt.setInt(idx++, history.h_add_pri_id);
                     histPrepStmt.setInt(idx++, history.h_c_id);
                     histPrepStmt.setInt(idx++, history.h_c_d_id);
                     histPrepStmt.setInt(idx++, history.h_c_w_id);

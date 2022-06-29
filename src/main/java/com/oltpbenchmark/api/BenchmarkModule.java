@@ -79,7 +79,7 @@ public abstract class BenchmarkModule {
         config.setPassword(workConf.getPassword());
         config.setMaximumPoolSize(workConf.getPoolSize());
         config.setConnectionTimeout(300000);
-//        config.setMaximumPoolSize(32);
+        config.setMaximumPoolSize(100);
 
         dataSource = new HikariDataSource(config);
     }
