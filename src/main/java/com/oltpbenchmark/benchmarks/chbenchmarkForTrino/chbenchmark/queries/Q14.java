@@ -19,12 +19,14 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q14 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT (100.00 * sum(CASE WHEN i_data LIKE 'PR%' THEN ol_amount ELSE 0 END) / (1 + sum(ol_amount))) AS promo_revenue "
-                    + "FROM order_line, "
-                    + "item "
+                    + "FROM " +order_line() + ", "
+                    + "" +item() + " "
                     + "WHERE ol_i_id = i_id "
                     + "AND ol_delivery_d >= TIMESTAMP'2007-01-02 00:00:00.000000' "
                     + "AND ol_delivery_d < TIMESTAMP '2020-01-02 00:00:00.000000'"
@@ -32,5 +34,9 @@ public class Q14 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q14().query_stmt.getSQL());
     }
 }

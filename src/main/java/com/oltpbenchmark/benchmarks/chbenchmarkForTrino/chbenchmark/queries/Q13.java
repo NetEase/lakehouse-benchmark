@@ -19,6 +19,8 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q13 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -27,8 +29,8 @@ public class Q13 extends GenericQuery {
                     + "FROM "
                     + "(SELECT c_id, "
                     + "count(o_id) AS c_count "
-                    + "FROM customer "
-                    + "LEFT OUTER JOIN oorder ON (c_w_id = o_w_id "
+                    + "FROM " +customer() + " "
+                    + "LEFT OUTER JOIN " +oorder() + " ON (c_w_id = o_w_id "
                     + "AND c_d_id = o_d_id "
                     + "AND c_id = o_c_id "
                     + "AND o_carrier_id > 8) "
@@ -39,5 +41,9 @@ public class Q13 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q13().query_stmt.getSQL());
     }
 }

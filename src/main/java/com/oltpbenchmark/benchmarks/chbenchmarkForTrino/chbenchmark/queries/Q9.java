@@ -19,6 +19,8 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q9 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -26,12 +28,12 @@ public class Q9 extends GenericQuery {
             + "extract(YEAR "
             + "FROM o_entry_d) AS l_year, "
             + "sum(ol_amount) AS sum_profit "
-            + "FROM item, "
-            + "stock, "
-            + "supplier, "
-            + "order_line, "
-            + "oorder, "
-            + "nation "
+            + "FROM " +item() + ", "
+            + "" +stock() + ", "
+            + "" +supplier() + ", "
+            + "" +order_line() + ", "
+            + "" +oorder() + ", "
+            + "" +nation() + " "
             + "WHERE ol_i_id = s_i_id "
             + "AND ol_supply_w_id = s_w_id "
             + "AND MOD ((s_w_id * s_i_id), 10000) = su_suppkey "

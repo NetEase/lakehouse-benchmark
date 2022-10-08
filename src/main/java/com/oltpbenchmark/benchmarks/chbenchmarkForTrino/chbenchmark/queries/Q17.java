@@ -19,14 +19,16 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q17 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT SUM(ol_amount) / 2.0 AS avg_yearly "
-                    + "FROM order_line, "
+                    + "FROM " +order_line() + ", "
                     + "(SELECT i_id, AVG (ol_quantity) AS a "
-                    + "FROM item, "
-                    + "order_line "
+                    + "FROM " +item() + ", "
+                    + "" +order_line() + " "
                     + "WHERE i_data LIKE '%b' "
                     + "AND ol_i_id = i_id "
                     + "GROUP BY i_id) t "
@@ -36,5 +38,9 @@ public class Q17 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q17().query_stmt.getSQL());
     }
 }

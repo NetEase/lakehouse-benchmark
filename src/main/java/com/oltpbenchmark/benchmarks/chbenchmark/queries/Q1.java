@@ -37,4 +37,9 @@ public class Q1 extends GenericQuery {
     protected SQLStmt get_query() {
         return query_stmt;
     }
+
+    public static void main(String[] args) {
+        System.out.println(new Q1().query_stmt.getSQL());
+    }
+
 }

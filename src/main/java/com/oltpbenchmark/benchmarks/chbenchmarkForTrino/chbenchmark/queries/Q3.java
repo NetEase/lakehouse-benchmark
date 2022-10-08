@@ -19,6 +19,8 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q3 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -27,10 +29,10 @@ public class Q3 extends GenericQuery {
                     + "ol_d_id, "
                     + "sum(ol_amount) AS revenue, "
                     + "o_entry_d "
-                    + "FROM customer, "
-                    + "new_order, "
-                    + "oorder, "
-                    + "order_line "
+                    + "FROM " +customer() + ", "
+                    + "" +new_order() + ", "
+                    + "" +oorder() + ", "
+                    + "" +order_line() + " "
                     + "WHERE c_state LIKE 'A%' "
                     + "AND c_id = o_c_id "
                     + "AND c_w_id = o_w_id "
@@ -51,5 +53,9 @@ public class Q3 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q3().query_stmt.getSQL());
     }
 }

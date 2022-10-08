@@ -1,7 +1,3 @@
-DROP TABLE IF EXISTS supplier CASCADE;
-DROP TABLE IF EXISTS nation CASCADE;
-DROP TABLE IF EXISTS region CASCADE;
-
 CREATE TABLE region (
     r_regionkey int       NOT NULL,
     r_name      varchar(55)  NOT NULL,

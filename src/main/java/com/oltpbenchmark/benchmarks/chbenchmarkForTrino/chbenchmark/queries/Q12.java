@@ -19,6 +19,8 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q12 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -27,8 +29,8 @@ public class Q12 extends GenericQuery {
                     + "OR o_carrier_id = 2 THEN 1 ELSE 0 END) AS high_line_count, "
                     + "sum(CASE WHEN o_carrier_id <> 1 "
                     + "AND o_carrier_id <> 2 THEN 1 ELSE 0 END) AS low_line_count "
-                    + "FROM oorder, "
-                    + "order_line "
+                    + "FROM " +oorder() + ", "
+                    + "" +order_line() + " "
                     + "WHERE ol_w_id = o_w_id "
                     + "AND ol_d_id = o_d_id "
                     + "AND ol_o_id = o_id "
@@ -40,5 +42,9 @@ public class Q12 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q12().query_stmt.getSQL());
     }
 }

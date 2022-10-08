@@ -1,42 +1,35 @@
-# OLTP-Bench II
+# Ch-Benchmark for Data-Lake
+Forked from https://github.com/timveil-cockroach/oltpbench with a focus on chbenchmark for data lake. Support Trino and Presto.
+## Data Lake Benchmarks
+### Over Design
+![design](benchmark-design.png)
 
-![Java CI with Maven](https://github.com/timveil-cockroach/oltpbench/workflows/Java%20CI%20with%20Maven/badge.svg?branch=maven)
+- Generate the initial data set to mysql. The cofig of mysql is config/mysql/sample_chbenchmark_config.xml. User need to
+  modify config. The param "scalefactor" is the number of  warehouses to determine the size of data. The shell to generate
+  data is 
+  ```
+  java -jar oltpbench2.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --create=true --load=true
+  ```
+- Synchronize the static data from mysql to data lake through flink CDC tools [cdc-porject]()
+- Turn on the TPC-C and generate incremental data to mysql. Shell is 
+  ```
+  java -jar oltpbench2.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --execute=true -s 5
+  ```
+- Perform TPC-H queries through Trino/Presto. The config of Trino/Presto is config/trino/sample_chbenchmark_config.xml, 
+  The param "terminals" is the query parallelism. "works.work.time" is the 
+  time to run TPC-H query. The shell is
+  ```
+  java -jar oltpbench2.jar -b chbenchmarkForTrino -c config/trino/sample_chbenchmark_config.xml --create=false --load=false --execute=true
+  ```
 
-### UPDATE 2021-09-28: Project moved to [BenchBase](https://github.com/cmu-db/benchbase).
-The team behind the original [OLTP-Bench](https://github.com/oltpbenchmark/oltpbench) project was kind enough to incorporate a majority of my changes from this fork back into their original codebase.  Given the significance of those changes the team has decided to create a brand new repository and deprecate the original.  As a result I will focus any new development effort on the newly created [BenchBase](https://github.com/cmu-db/benchbase) project and limit my changes here. Thanks again to [Andy Pavlo](https://github.com/apavlo) and team for their help and collaboration.
+Notices:
+1. Trino for Arctic and Delta-Lake, Presto for Hudi.
+2. Need java 17
+3. Many table will with suffix like "oorder_rt, oorder_ro, oorder#base", User can set "export tpcc_name_suffix=_rt" to config suffix. 
+4. Presto jdbc client need two PR [Allow committing empty transaction](https://github.com/prestodb/presto/pull/18136), [Allow AutoCommit](https://github.com/prestodb/presto/pull/18135)
+   We supply a can use client in presto-client/ dir, You need to modify and compile code by yourself when you want to use other version
+5. The config trino/sample_chbenchmark_config.xml is for trino, If you use presto you need to modify "driver","url". 
 
---------------
-
-Forked from https://github.com/oltpbenchmark/oltpbench with a focus on cleanup and modernization.  Given the volume and scope of these changes, I have elected not to submit pull requests to the original project as it is unlikely they would or could be accepted.  Please see [Modifications to Original](#modifications-to-original) for changes in this fork.
-
-See also: [OLTP-Bench: An extensible testbed for benchmarking relational databases](http://www.vldb.org/pvldb/vol7/p277-difallah.pdf) D. E. Difallah, A. Pavlo, C. Curino, and P. Cudre-Mauroux. In VLDB 2014.
-
-## Benchmarks
-
-### From Original Paper
-* [AuctionMark](https://github.com/timveil-cockroach/oltpbench/wiki/AuctionMark)
-* [CH-benCHmark](https://github.com/timveil-cockroach/oltpbench/wiki/CH-benCHmark)
-* [Epinions.com](https://github.com/timveil-cockroach/oltpbench/wiki/epinions)
-* [Resource Stresser](https://github.com/timveil-cockroach/oltpbench/wiki/Resource-Stresser)
-* [SEATS](https://github.com/timveil-cockroach/oltpbench/wiki/Seats)
-* [SIBench](https://github.com/timveil-cockroach/oltpbench/wiki/SIBench)
-* [SmallBank](https://github.com/timveil-cockroach/oltpbench/wiki/SmallBank)
-* [TATP](https://github.com/timveil-cockroach/oltpbench/wiki/TATP)
-* [TPC-C](https://github.com/timveil-cockroach/oltpbench/wiki/TPC-C)
-* [Twitter](https://github.com/timveil-cockroach/oltpbench/wiki/Twitter)
-* [Voter](https://github.com/timveil-cockroach/oltpbench/wiki/Voter)
-* [Wikipedia](https://github.com/timveil-cockroach/oltpbench/wiki/Wikipedia)
-* [YCSB](https://github.com/timveil-cockroach/oltpbench/wiki/YCSB)
-
-### Added Later
-* [TPC-H](https://github.com/timveil-cockroach/oltpbench/wiki/TPC-H)
-* TPC-DS - no configuration
-* hyadapt - no configuration
-* [NoOp](https://github.com/timveil-cockroach/oltpbench/wiki/NoOp)
-
-### Removed
-* JPAB - this project appears abandoned and hasn't seen an update since 2012.  I don't have a great deal of faith in a Hibernate benchmark that hasn't kept pace with Hibernate.
-* [LinkBench](http://people.cs.uchicago.edu/~tga/pubs/sigmod-linkbench-2013.pdf) - no implementation
 
 ## How to Build
 Run the following command to build the distribution:

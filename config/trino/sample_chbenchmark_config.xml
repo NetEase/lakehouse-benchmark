@@ -7,13 +7,14 @@
     <url>jdbc:trino://localhost:8080/arctic/tpch</url>
     <username>benchmark</username>
 <!--    <password>benchmark</password>-->
-    <isolation>TRANSACTION_SERIALIZABLE</isolation>
+    <isolation>TRANSACTION_READ_UNCOMMITTED</isolation>
     <batchsize>128</batchsize>
 
     <!-- Scale factor is the number of warehouses in TPCC -->
     <scalefactor>1</scalefactor>
 
     <!-- The workload -->
+
     <!-- Number of terminal per workload -->
     <terminals>1</terminals>
 
@@ -29,14 +30,14 @@
 
         <!-- A Basic WorkPhase for Mixed Workloads -->
         <work>
-            <time>10</time>
+            <time>120</time>
 
             <!-- Note: The rate can be set to UNLIMITED or DISABLED -->
             <rate>200</rate>
 
             <!-- Need to Specify transaction weights for each workload .. Otherwise the number of fields won't match -->
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
 
         <!-- Extra features showcase -->
@@ -52,7 +53,7 @@
 
             <!-- Specifies transaction weight for each workload. -->
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
 
         <!-- Extra features -->
@@ -63,7 +64,7 @@
             <rate bench="chbenchmarkForTrino">unlimited</rate>
 
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
     </works>
 
@@ -111,9 +112,6 @@
         </transactiontype>
         <transactiontype>
             <name>Q14</name>
-        </transactiontype>
-        <transactiontype>
-            <name>Q15</name>
         </transactiontype>
         <transactiontype>
             <name>Q16</name>

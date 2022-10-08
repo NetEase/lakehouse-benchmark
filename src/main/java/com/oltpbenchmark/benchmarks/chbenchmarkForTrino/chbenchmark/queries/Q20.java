@@ -19,18 +19,20 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q20 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT su_name, "
                     + "su_address "
-                    + "FROM supplier, "
-                    + "nation "
+                    + "FROM " +supplier() + ", "
+                    + "" +nation() + " "
                     + "WHERE su_suppkey IN "
                     + "(SELECT mod(s_i_id * s_w_id, 10000) "
-                    + "FROM stock "
-                    + "INNER JOIN item ON i_id = s_i_id "
-                    + "INNER JOIN order_line ON ol_i_id = s_i_id "
+                    + "FROM " +stock() + " "
+                    + "INNER JOIN " +item() + " ON i_id = s_i_id "
+                    + "INNER JOIN " +order_line() + " ON ol_i_id = s_i_id "
                     + "WHERE ol_delivery_d > TIMESTAMP '2010-05-23 12:00:00' "
                     + "AND i_data LIKE 'co%' "
                     + "GROUP BY s_i_id, "
@@ -43,5 +45,9 @@ public class Q20 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q20().query_stmt.getSQL());
     }
 }

@@ -19,6 +19,8 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q10 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -28,10 +30,10 @@ public class Q10 extends GenericQuery {
                     + "c_city, "
                     + "c_phone, "
                     + "n_name "
-                    + "FROM customer, "
-                    + "oorder, "
-                    + "order_line, "
-                    + "nation "
+                    + "FROM " +customer() + ", "
+                    + "" +oorder() + ", "
+                    + "" +order_line() + ", "
+                    + "" +nation() + " "
                     + "WHERE c_id = o_c_id "
                     + "AND c_w_id = o_w_id "
                     + "AND c_d_id = o_d_id "
@@ -51,5 +53,9 @@ public class Q10 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q10().query_stmt.getSQL());
     }
 }

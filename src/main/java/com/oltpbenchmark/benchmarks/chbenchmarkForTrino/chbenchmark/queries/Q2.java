@@ -19,6 +19,8 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q2 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -30,12 +32,12 @@ public class Q2 extends GenericQuery {
                     + "su_address, "
                     + "su_phone, "
                     + "su_comment "
-                    + "FROM item, supplier, stock, nation, region, "
+                    + "FROM " +item() + ", " +supplier() + ", " +stock() + ", " +nation() + ", " +region() + ", "
                     + "(SELECT s_i_id AS m_i_id, MIN(s_quantity) AS m_s_quantity "
-                    + "FROM stock, "
-                    + "supplier, "
-                    + "nation, "
-                    + "region "
+                    + "FROM " +stock() + ", "
+                    + "" +supplier() + ", "
+                    + "" +nation() + ", "
+                    + "" +region() + " "
                     + "WHERE MOD((s_w_id*s_i_id), 10000)=su_suppkey "
                     + "AND su_nationkey=n_nationkey "
                     + "AND n_regionkey=r_regionkey "
@@ -57,4 +59,9 @@ public class Q2 extends GenericQuery {
     protected SQLStmt get_query() {
         return query_stmt;
     }
+
+    public static void main(String[] args) {
+        System.out.println(new Q2().query_stmt.getSQL());
+    }
+
 }

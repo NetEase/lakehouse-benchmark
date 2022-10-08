@@ -19,12 +19,14 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q19 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT sum(ol_amount) AS revenue "
-                    + "FROM order_line, "
-                    + "item "
+                    + "FROM " +order_line() + ", "
+                    + "" +item() + " "
                     + "WHERE (ol_i_id = i_id "
                     + "AND i_data LIKE '%a' "
                     + "AND ol_quantity >= 1 "
@@ -53,5 +55,9 @@ public class Q19 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q19().query_stmt.getSQL());
     }
 }

@@ -19,16 +19,18 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q21 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT su_name, "
                     + "count(*) AS numwait "
-                    + "FROM supplier, "
-                    + "order_line l1, "
-                    + "oorder, "
-                    + "stock, "
-                    + "nation "
+                    + "FROM " +supplier() + ", "
+                    + "" +order_line() + " l1, "
+                    + "" +oorder() + ", "
+                    + "" +stock() + ", "
+                    + "" +nation() + " "
                     + "WHERE ol_o_id = o_id "
                     + "AND ol_w_id = o_w_id "
                     + "AND ol_d_id = o_d_id "
@@ -38,7 +40,7 @@ public class Q21 extends GenericQuery {
                     + "AND l1.ol_delivery_d > o_entry_d "
                     + "AND NOT EXISTS "
                     + "(SELECT * "
-                    + "FROM order_line l2 "
+                    + "FROM " +order_line() + " l2 "
                     + "WHERE l2.ol_o_id = l1.ol_o_id "
                     + "AND l2.ol_w_id = l1.ol_w_id "
                     + "AND l2.ol_d_id = l1.ol_d_id "

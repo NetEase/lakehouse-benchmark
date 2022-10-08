@@ -19,6 +19,8 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.order_line;
+
 public class Q1 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -28,7 +30,7 @@ public class Q1 extends GenericQuery {
                     + "avg(ol_quantity) AS avg_qty, "
                     + "avg(ol_amount) AS avg_amount, "
                     + "count(*) AS count_order "
-                    + "FROM order_line "
+                    + "FROM" + order_line()
                     + "WHERE ol_delivery_d > TIMESTAMP '2007-01-02 00:00:00.000000' "
                     + "GROUP BY ol_number "
                     + "ORDER BY ol_number"
@@ -36,5 +38,9 @@ public class Q1 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q1().query_stmt.getSQL());
     }
 }

@@ -19,6 +19,8 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q16 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -26,13 +28,13 @@ public class Q16 extends GenericQuery {
                     + "substring(i_data from  1 for 3) AS brand, "
                     + "i_price, "
                     + "count(DISTINCT (mod((s_w_id * s_i_id),10000))) AS supplier_cnt "
-                    + "FROM stock, "
-                    + "item "
+                    + "FROM " +stock() + ", "
+                    + "" +item() + " "
                     + "WHERE i_id = s_i_id "
                     + "AND i_data NOT LIKE 'zz%' "
                     + "AND (mod((s_w_id * s_i_id),10000) NOT IN "
                     + "(SELECT su_suppkey "
-                    + "FROM supplier "
+                    + "FROM " +supplier() + " "
                     + "WHERE su_comment LIKE '%bad%')) "
                     + "GROUP BY i_name, "
                     + "substring(i_data from  1 for 3), "

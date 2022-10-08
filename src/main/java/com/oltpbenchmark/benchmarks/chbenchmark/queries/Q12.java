@@ -41,4 +41,8 @@ public class Q12 extends GenericQuery {
     protected SQLStmt get_query() {
         return query_stmt;
     }
+
+    public static void main(String[] args) {
+        System.out.println(new Q12().query_stmt.getSQL());
+    }
 }

@@ -19,11 +19,13 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.order_line;
+
 public class Q6 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT sum(ol_amount) AS revenue "
-                    + "FROM order_line "
+                    + "FROM " +order_line() + " "
                     + "WHERE ol_delivery_d >= TIMESTAMP '1999-01-01 00:00:00.000000' "
                     + "AND ol_delivery_d < TIMESTAMP '2020-01-01 00:00:00.000000' "
                     + "AND ol_quantity BETWEEN 1 AND 100000"
@@ -31,5 +33,9 @@ public class Q6 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q6().query_stmt.getSQL());
     }
 }

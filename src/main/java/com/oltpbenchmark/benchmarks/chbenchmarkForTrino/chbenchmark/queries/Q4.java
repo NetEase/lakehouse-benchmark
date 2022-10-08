@@ -19,15 +19,17 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q4 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT o_ol_cnt, "
                     + "count(*) AS order_count "
-                    + "FROM oorder "
+                    + "FROM " +oorder() + " "
                     + "WHERE exists "
                     + "(SELECT * "
-                    + "FROM order_line "
+                    + "FROM " +order_line() + " "
                     + "WHERE o_id = ol_o_id "
                     + "AND o_w_id = ol_w_id "
                     + "AND o_d_id = ol_d_id "
@@ -38,5 +40,9 @@ public class Q4 extends GenericQuery {
 
     protected SQLStmt get_query() {
         return query_stmt;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Q4().query_stmt.getSQL());
     }
 }

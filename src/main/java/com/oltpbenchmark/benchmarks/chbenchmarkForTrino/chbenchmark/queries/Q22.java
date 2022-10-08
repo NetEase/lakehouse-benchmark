@@ -19,13 +19,15 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q22 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT substring(c_state,1,1) AS country, "
                     + "count(*) AS numcust, "
                     + "sum(c_balance) AS totacctbal "
-                    + "FROM customer "
+                    + "FROM " +customer() + " "
                     + "WHERE substring(c_phone from 1 for 1) IN ('1', "
                     + "'2', "
                     + "'3', "
@@ -35,7 +37,7 @@ public class Q22 extends GenericQuery {
                     + "'7') "
                     + "AND c_balance > "
                     + "(SELECT avg(c_balance) "
-                    + "FROM customer "
+                    + "FROM " +customer() + " "
                     + "WHERE c_balance > 0.00 "
                     + "AND substring(c_phone from 1 for 1) IN ('1', "
                     + "'2', "
@@ -46,7 +48,7 @@ public class Q22 extends GenericQuery {
                     + "'7')) "
                     + "AND NOT EXISTS "
                     + "(SELECT * "
-                    + "FROM oorder "
+                    + "FROM " +oorder() + " "
                     + "WHERE o_c_id = c_id "
                     + "AND o_w_id = c_w_id "
                     + "AND o_d_id = c_d_id) "

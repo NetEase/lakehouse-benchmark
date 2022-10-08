@@ -19,18 +19,20 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries;
 
 import com.oltpbenchmark.api.SQLStmt;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.*;
+
 public class Q5 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT n_name, "
                     + "sum(ol_amount) AS revenue "
-                    + "FROM customer, "
-                    + "oorder, "
-                    + "order_line, "
-                    + "stock, "
-                    + "supplier, "
-                    + "nation, "
-                    + "region "
+                    + "FROM " +customer() + ", "
+                    + "" +oorder() + ", "
+                    + "" +order_line() + ", "
+                    + "" +stock() + ", "
+                    + "" +supplier() + ", "
+                    + "" +nation() + ", "
+                    + "" +region() + " "
                     + "WHERE c_id = o_c_id "
                     + "AND c_w_id = o_w_id "
                     + "AND c_d_id = o_d_id "

@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="chbenchmark - trino" type="Application" factoryName="Application">
+    <envs>
+      <env name="tpcc_name_suffix" value="_rt" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="com.oltpbenchmark.DBWorkload" />
     <module name="oltpbench2" />
     <option name="PROGRAM_PARAMETERS" value="-b chbenchmarkForTrino -c config/trino/sample_chbenchmark_config.xml --create=false --load=false --execute=true" />
