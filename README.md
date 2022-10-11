@@ -1,7 +1,6 @@
 # Ch-Benchmark for Data-Lake
 Forked from https://github.com/timveil-cockroach/oltpbench with a focus on chbenchmark for data lake. Support Trino and Presto.
-## Data Lake Benchmarks
-### Over Design
+## Data Lake Ch-Benchmarks
 ![design](benchmark-design.png)
 
 - Generate the initial data set to mysql. The cofig of mysql is config/mysql/sample_chbenchmark_config.xml. User need to
