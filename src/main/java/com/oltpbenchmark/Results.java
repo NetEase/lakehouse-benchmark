@@ -198,4 +198,65 @@ public final class Results {
         }
     }
 
+    public void writeStatistics(List<TransactionType> activeTXTypes, PrintStream out) {
+        Map<Integer, Integer> max = new HashMap<>();
+        Map<Integer, Integer> min = new HashMap<>();
+        Map<Integer, int[]> aver = new HashMap<>();
+        for (Sample sample: latencySamples){
+            Integer tranType = sample.tranType;
+            Integer latencyUs = sample.latencyUs;
+            //max
+            {
+                Integer old = max.get(tranType);
+                if (old == null || latencyUs > old) {
+                    max.put(tranType, latencyUs);
+                }
+            }
+
+            //min
+            {
+                Integer old = min.get(tranType);
+                if (old == null || latencyUs < old) {
+                    min.put(tranType, latencyUs);
+                }
+            }
+
+            //aver
+            {
+                int[] olds = aver.get(tranType);
+                if (olds == null){
+                    olds = new int[3];
+                    aver.put(tranType, olds);
+                }
+                olds[0] += latencyUs;
+                olds[1]++;
+                olds[2] = olds[0]/olds[1];
+            }
+        }
+
+        // long startNs = latencySamples.get(0).startNs;
+        String[] header = {
+            "Transaction Type Index",
+            "Transaction Name",
+            "Latency Min (microseconds)",
+            "Latency Max (microseconds)",
+            "Latency Aver (microseconds)"
+        };
+        out.println(StringUtil.join(",", header));
+        for (Map.Entry<Integer, Integer> entry: min.entrySet()) {
+            Integer maxValue = max.get(entry.getKey());
+            Integer averValue = aver.get(entry.getKey()) == null? null: aver.get(entry.getKey())[2];
+            String[] row = {
+                Integer.toString(entry.getKey()),
+                // Important!
+                // The TxnType offsets start at 1!
+                activeTXTypes.get(entry.getKey() - 1).getName(),
+                Integer.toString(entry.getValue()),
+                Integer.toString(maxValue),
+                Integer.toString(averValue),
+                };
+            out.println(StringUtil.join(",", row));
+        }
+    }
+
 }

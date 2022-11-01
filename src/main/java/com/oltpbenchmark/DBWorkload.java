@@ -519,6 +519,12 @@ public class DBWorkload {
 
         int windowSize = Integer.parseInt(argsLine.getOptionValue("s", "5"));
 
+        String statisticsFileName = baseFileName + ".statistic.csv";
+        try (PrintStream ps = new PrintStream(new File(FileUtil.joinPath(outputDirectory, statisticsFileName)))) {
+            LOG.info("Output statistics data into file: {}", statisticsFileName);
+            r.writeStatistics(activeTXTypes, ps);
+        }
+
         String rawFileName = baseFileName + ".raw.csv";
         try (PrintStream ps = new PrintStream(new File(FileUtil.joinPath(outputDirectory, rawFileName)))) {
             LOG.info("Output Raw data into file: {}", rawFileName);
