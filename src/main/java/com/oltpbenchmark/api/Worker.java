@@ -369,7 +369,8 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         LOG.debug(String.format("%s %s committing...", this, transactionType));
                     }
 
-                    conn.commit();
+                    //TODO: tpcc need this but tpch may not need
+                    //conn.commit();
 
                     break;
 
@@ -383,8 +384,6 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     break;
 
                 } catch (SQLException ex) {
-                    conn.rollback();
-
                     if (isRetryable(ex)) {
                         LOG.warn(String.format("Retryable SQLException occurred during [%s]... current retry attempt [%d], max retry attempts [%d], sql state [%s], error code [%d].", transactionType, retryCount, maxRetryCount, ex.getSQLState(), ex.getErrorCode()), ex);
 
@@ -396,6 +395,8 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
 
                         status = TransactionStatus.ERROR;
                     }
+
+                    conn.rollback();
 
                 } finally {
 
