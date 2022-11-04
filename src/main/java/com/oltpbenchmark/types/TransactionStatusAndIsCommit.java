@@ -2,7 +2,7 @@ package com.oltpbenchmark.types;
 
 public class TransactionStatusAndIsCommit {
   TransactionStatus transactionStatus;
-   Boolean isCommit;
+  Boolean isCommit;
 
   public TransactionStatusAndIsCommit(TransactionStatus transactionStatus, Boolean isCommit) {
     this.transactionStatus = transactionStatus;
