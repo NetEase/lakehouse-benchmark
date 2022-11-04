@@ -20,7 +20,7 @@ package com.oltpbenchmark.benchmarks.tpcds;
 import com.oltpbenchmark.api.Procedure;
 import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
-import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 
 import java.sql.Connection;
 
@@ -30,7 +30,7 @@ public class TPCDSWorker extends Worker<TPCDSBenchmark> {
         super(benchmarkModule, id);
     }
 
-    protected TransactionStatus executeWork(Connection conn, TransactionType txnType) throws Procedure.UserAbortException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType txnType) throws Procedure.UserAbortException {
         return null;
     }
 }

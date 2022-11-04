@@ -23,6 +23,7 @@ import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.resourcestresser.procedures.*;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -65,7 +66,7 @@ public class ResourceStresserWorker extends Worker<ResourceStresserBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
         if (nextTrans.getProcedureClass().equals(CPU1.class)) {
             cpu1Transaction(conn, CPU1_howManyPerTransaction, CPU1_sleep, CPU1_nestedLevel);
         } else if (nextTrans.getProcedureClass().equals(CPU2.class)) {
@@ -79,7 +80,7 @@ public class ResourceStresserWorker extends Worker<ResourceStresserBenchmark> {
         } else if (nextTrans.getProcedureClass().equals(Contention2.class)) {
             contention2Transaction(conn, CONTENTION2_howManyKeys, CONTENTION2_howManyUpdates, CONTENTION2_sleepLength);
         }
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     private void contention1Transaction(Connection conn, int howManyUpdates, int sleepLength) throws SQLException {

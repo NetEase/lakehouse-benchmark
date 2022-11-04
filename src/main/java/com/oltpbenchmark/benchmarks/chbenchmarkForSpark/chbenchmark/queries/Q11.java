@@ -25,6 +25,13 @@ import static com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.Table
 
 public class Q11 extends GenericQuery {
 
+    private static final Boolean IF_IS_NEED_COMMIT = false;
+
+    @Override
+    public Boolean get_isCommit() {
+        return IF_IS_NEED_COMMIT;
+    }
+
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT s_i_id, "
                     + "sum(s_order_cnt) AS ordercount "

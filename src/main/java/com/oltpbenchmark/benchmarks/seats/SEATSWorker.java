@@ -48,6 +48,7 @@ import com.oltpbenchmark.benchmarks.seats.procedures.*;
 import com.oltpbenchmark.benchmarks.seats.util.CustomerId;
 import com.oltpbenchmark.benchmarks.seats.util.FlightId;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.RandomGenerator;
 import com.oltpbenchmark.util.StringUtil;
 import org.slf4j.Logger;
@@ -280,7 +281,7 @@ public class SEATSWorker extends Worker<SEATSBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException {
         Transaction txn = Transaction.get(txnType.getName());
 
 
@@ -329,13 +330,13 @@ public class SEATSWorker extends Worker<SEATSBenchmark> {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Unable to execute {} right now", proc);
             }
-            return (TransactionStatus.RETRY_DIFFERENT);
+            return new TransactionStatusAndIsCommit(TransactionStatus.RETRY_DIFFERENT);
         }
 
         if (ret && LOG.isDebugEnabled()) {
             LOG.debug("Executed a new invocation of {}", txn);
         }
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     /**

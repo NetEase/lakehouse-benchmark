@@ -29,6 +29,8 @@ public abstract class GenericQuery extends Procedure {
 
     protected abstract SQLStmt get_query();
 
+    public abstract Boolean get_isCommit();
+
     public void run(Connection conn) throws SQLException {
         try (PreparedStatement stmt = this.getPreparedStatement(conn, get_query()); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {

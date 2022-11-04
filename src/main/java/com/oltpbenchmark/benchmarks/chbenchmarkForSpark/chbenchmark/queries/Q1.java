@@ -23,6 +23,13 @@ import static com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.Table
 
 public class Q1 extends GenericQuery {
 
+    private static final Boolean IF_IS_NEED_COMMIT = false;
+
+    @Override
+    public Boolean get_isCommit() {
+        return IF_IS_NEED_COMMIT;
+    }
+
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT ol_number, "
                     + "sum(ol_quantity) AS sum_qty, "
@@ -39,6 +46,7 @@ public class Q1 extends GenericQuery {
     protected SQLStmt get_query() {
         return query_stmt;
     }
+
 
     public static void main(String[] args) {
         System.out.println(new Q1().query_stmt.getSQL());

@@ -25,6 +25,7 @@ import com.oltpbenchmark.benchmarks.ycsb.procedures.*;
 import com.oltpbenchmark.distributions.CounterGenerator;
 import com.oltpbenchmark.distributions.ZipfianGenerator;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.TextGenerator;
 
 import java.sql.Connection;
@@ -79,7 +80,7 @@ class YCSBWorker extends Worker<YCSBBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
         Class<? extends Procedure> procClass = nextTrans.getProcedureClass();
 
         if (procClass.equals(DeleteRecord.class)) {
@@ -95,7 +96,7 @@ class YCSBWorker extends Worker<YCSBBenchmark> {
         } else if (procClass.equals(UpdateRecord.class)) {
             updateRecord(conn);
         }
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     private void updateRecord(Connection conn) throws SQLException {

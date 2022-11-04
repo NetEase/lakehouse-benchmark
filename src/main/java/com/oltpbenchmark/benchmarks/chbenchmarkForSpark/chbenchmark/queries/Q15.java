@@ -25,6 +25,13 @@ import java.sql.Statement;
 
 public class Q15 extends GenericQuery {
 
+    private static final Boolean IF_IS_NEED_COMMIT = false;
+
+    @Override
+    public Boolean get_isCommit() {
+        return IF_IS_NEED_COMMIT;
+    }
+
     public final SQLStmt createview_stmt = new SQLStmt(
             "CREATE view revenue0 (supplier_no, total_revenue) AS "
                     + "SELECT "

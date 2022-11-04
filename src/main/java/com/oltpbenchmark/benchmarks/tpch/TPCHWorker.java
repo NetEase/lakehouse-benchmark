@@ -22,6 +22,7 @@ import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.tpch.procedures.GenericQuery;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.RandomGenerator;
 
 import java.sql.Connection;
@@ -38,7 +39,7 @@ public class TPCHWorker extends Worker<TPCHBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTransaction) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTransaction) throws UserAbortException, SQLException {
         try {
             GenericQuery proc = (GenericQuery) this.getProcedure(nextTransaction.getProcedureClass());
             proc.run(conn, rand);
@@ -46,7 +47,7 @@ public class TPCHWorker extends Worker<TPCHBenchmark> {
             throw new RuntimeException(e);
         }
 
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
 
     }
 }

@@ -24,6 +24,13 @@ import static com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.Table
 
 public class Q17 extends GenericQuery {
 
+    private static final Boolean IF_IS_NEED_COMMIT = false;
+
+    @Override
+    public Boolean get_isCommit() {
+        return IF_IS_NEED_COMMIT;
+    }
+
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT SUM(ol_amount) / 2.0 AS avg_yearly "
                     + "FROM " +order_line() + ", "

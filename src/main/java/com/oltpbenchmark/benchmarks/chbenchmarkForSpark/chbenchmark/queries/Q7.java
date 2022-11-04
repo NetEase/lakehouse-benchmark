@@ -28,6 +28,13 @@ import static com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.Table
 
 public class Q7 extends GenericQuery {
 
+    private static final Boolean IF_IS_NEED_COMMIT = false;
+
+    @Override
+    public Boolean get_isCommit() {
+        return IF_IS_NEED_COMMIT;
+    }
+
     public final SQLStmt query_stmt = new SQLStmt(
             "SELECT su_nationkey AS supp_nation, "
                     + "substring(c_state from 1 for 1) AS cust_nation, "
