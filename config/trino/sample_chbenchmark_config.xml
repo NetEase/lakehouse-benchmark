@@ -4,7 +4,7 @@
     <!-- Connection details -->
     <type>TRINO</type>
     <driver>io.trino.jdbc.TrinoDriver</driver>
-    <url>jdbc:trino://localhost:8080/arctic/tpch</url>
+    <url>jdbc:trino://localhost:1260/local_catalog/benchmark</url>
     <username>benchmark</username>
 <!--    <password>benchmark</password>-->
     <isolation>TRANSACTION_READ_UNCOMMITTED</isolation>
@@ -30,42 +30,17 @@
 
         <!-- A Basic WorkPhase for Mixed Workloads -->
         <work>
-            <time>60</time>
+            <time>1800</time>
 
             <!-- Note: The rate can be set to UNLIMITED or DISABLED -->
             <rate>200</rate>
-
+            <rate bench="tpcc">disabled</rate>
+            <rate bench="chbenchmarkForTrino">unlimited</rate>
             <!-- Need to Specify transaction weights for each workload .. Otherwise the number of fields won't match -->
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
 
-        <!-- Extra features showcase -->
-        <work>
-            <time>10</time>
-
-            <rate>200</rate>
-            <rate bench="chbenchmarkForTrino">disabled</rate>
-
-            <!-- NOTE: TPCC workers won't be distributed evenly between warehouses if not all workers are active -->
-            <active_terminals>1</active_terminals>
-            <active_terminals bench="chbenchmarkForTrino">1</active_terminals>
-
-            <!-- Specifies transaction weight for each workload. -->
-            <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
-        </work>
-
-        <!-- Extra features -->
-        <work>
-            <time>10</time>
-
-            <rate>100</rate>
-            <rate bench="chbenchmarkForTrino">unlimited</rate>
-
-            <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
-        </work>
     </works>
 
 

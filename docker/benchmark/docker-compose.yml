@@ -1,0 +1,67 @@
+version: '3.5'
+
+services:
+
+  mysql:
+    container_name: mysql
+    hostname: mysql
+    image: mysql:5.7
+    command: mysqld --max-connections=500
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: oltpbench
+    ports:
+      - "3306:3306"
+
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: metastore
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./images/hive-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-schema-2.3.0.postgres.sql
+      - ./images/hive-txn-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-txn-schema-2.3.0.postgres.sql
+
+
+  metastore:
+    image: nekyuubi/kyuubi-playground-metastore:1.6.0-incubating
+    container_name: metastore
+    hostname: metastore
+    ports:
+      - 9083
+    volumes:
+      - ./images/core-site.xml:/etc/hadoop/conf/core-site.xml
+      - ./images/hive-site.xml:/etc/hive/conf/hive-site.xml
+      - ./hive:/tmp/hive/warehouse
+    depends_on:
+      - postgres
+
+  ams:
+    image: arctic163/ams
+    container_name: ams
+    hostname: ams
+    volumes:
+      - ./data:/tmp/arctic/warehouse
+    ports:
+      - 1630:1630
+      - 1260:1260
+    tty: true
+    stdin_open: true
+
+  trino:
+    image: arctic163/trino
+    container_name: trino
+    hostname: trino
+    volumes:
+      - ./arctic:/tmp/arctic/warehouse
+      - ./hive:/tmp/hive/warehouse
+    ports:
+      - 9001:8080
+    depends_on:
+      - ams
