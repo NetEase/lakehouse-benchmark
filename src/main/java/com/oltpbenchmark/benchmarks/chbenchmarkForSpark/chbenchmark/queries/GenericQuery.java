@@ -15,22 +15,29 @@
  *
  */
 
-package com.oltpbenchmark.benchmarks.tpcds;
+package com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.queries;
 
 import com.oltpbenchmark.api.Procedure;
-import com.oltpbenchmark.api.TransactionType;
-import com.oltpbenchmark.api.Worker;
-import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
+import com.oltpbenchmark.api.SQLStmt;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+public abstract class GenericQuery extends Procedure {
 
-public class TPCDSWorker extends Worker<TPCDSBenchmark> {
-    public TPCDSWorker(TPCDSBenchmark benchmarkModule, int id) {
-        super(benchmarkModule, id);
-    }
+    protected abstract SQLStmt get_query();
 
-    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType txnType) throws Procedure.UserAbortException {
-        return null;
+    public abstract Boolean get_isCommit();
+
+    public void run(Connection conn) throws SQLException {
+        try (PreparedStatement stmt = this.getPreparedStatement(conn, get_query()); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                //do nothing
+            }
+        }catch (Exception e){
+            throw e;
+        }
     }
 }

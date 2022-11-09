@@ -24,6 +24,7 @@ import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.sibench.procedures.MinRecord;
 import com.oltpbenchmark.benchmarks.sibench.procedures.UpdateRecord;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -46,7 +47,7 @@ public class SIWorker extends Worker<SIBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
         Class<? extends Procedure> procClass = nextTrans.getProcedureClass();
 
         if (procClass.equals(MinRecord.class)) {
@@ -54,7 +55,7 @@ public class SIWorker extends Worker<SIBenchmark> {
         } else if (procClass.equals(UpdateRecord.class)) {
             updateRecord(conn);
         }
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     private void minRecord(Connection conn) throws SQLException {

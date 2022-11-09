@@ -25,6 +25,7 @@ import com.oltpbenchmark.benchmarks.wikipedia.procedures.*;
 import com.oltpbenchmark.benchmarks.wikipedia.util.Article;
 import com.oltpbenchmark.benchmarks.wikipedia.util.WikipediaUtil;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.RandomDistribution.Flat;
 import com.oltpbenchmark.util.RandomDistribution.Zipf;
 import com.oltpbenchmark.util.TextGenerator;
@@ -51,7 +52,7 @@ public class WikipediaWorker extends Worker<WikipediaBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTransaction) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTransaction) throws UserAbortException, SQLException {
         Flat z_users = new Flat(this.rng(), 1, this.num_users);
         Zipf z_pages = new Zipf(this.rng(), 1, this.num_pages, WikipediaConstants.USER_ID_SIGMA);
 
@@ -107,7 +108,7 @@ public class WikipediaWorker extends Worker<WikipediaBenchmark> {
             LOG.error("Caught SQL Exception in WikipediaWorker for procedure{}:{}", procClass.getName(), esql, esql);
             throw esql;
         }
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     /**

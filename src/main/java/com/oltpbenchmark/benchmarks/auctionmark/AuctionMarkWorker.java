@@ -27,6 +27,7 @@ import com.oltpbenchmark.benchmarks.auctionmark.exceptions.DuplicateItemIdExcept
 import com.oltpbenchmark.benchmarks.auctionmark.procedures.*;
 import com.oltpbenchmark.benchmarks.auctionmark.util.*;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.SQLUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -300,7 +301,7 @@ public class AuctionMarkWorker extends Worker<AuctionMarkBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException {
         // We need to subtract the different between this and the profile's start time,
         // since that accounts for the time gap between when the loader started and when the client start.
         // Otherwise, all of our cache date will be out dated if it took a really long time
@@ -329,7 +330,7 @@ public class AuctionMarkWorker extends Worker<AuctionMarkBenchmark> {
             txn = Transaction.get(txnType.getProcedureClass());
             if (!txn.canExecute(this)) {
                 LOG.trace("Unable to execute {} because it is not ready.  Will RETRY_DIFFERENT.", txn);
-                return (TransactionStatus.RETRY_DIFFERENT);
+                return new TransactionStatusAndIsCommit (TransactionStatus.RETRY_DIFFERENT);
             }
         }
 
@@ -380,7 +381,7 @@ public class AuctionMarkWorker extends Worker<AuctionMarkBenchmark> {
             LOG.debug("Executed a new invocation of {}", txn);
         }
 
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     /**
