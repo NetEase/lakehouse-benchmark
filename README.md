@@ -7,18 +7,18 @@ Forked from https://github.com/timveil-cockroach/oltpbench with a focus on chben
   modify config. The param "scalefactor" is the number of  warehouses to determine the size of data. The shell to generate
   data is 
   ```
-  java -jar oltpbench2.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --create=true --load=true
+  java -jar lakehouse-benchmark.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --create=true --load=true
   ```
 - Synchronize the static data from mysql to data lake through flink CDC tools [cdc-porject]()
 - Turn on the TPC-C and generate incremental data to mysql. Shell is 
   ```
-  java -jar oltpbench2.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --execute=true -s 5
+  java -jar lakehouse-benchmark.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --execute=true -s 5
   ```
 - Perform TPC-H queries through Trino/Presto. The config of Trino/Presto is config/trino/sample_chbenchmark_config.xml, 
   The param "terminals" is the query parallelism. "works.work.time" is the 
   duration to run TPC-H query. The shell is
   ```
-  java -jar oltpbench2.jar -b chbenchmarkForTrino -c config/trino/sample_chbenchmark_config.xml --create=false --load=false --execute=true
+  java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/sample_chbenchmark_config.xml --create=false --load=false --execute=true
   ```
 
 Notices:
@@ -36,9 +36,9 @@ Run the following command to build the distribution:
 ./mvnw clean package
 ```
 
-The following files will be placed in the `./target` folder, `oltpbench2-x.y.z.tgz` and `oltpbench2-x.y.z.zip`.  Pick your poison.
+The following files will be placed in the `./target` folder, `lakehouse-benchmark-x.y.z.tar` and `lakehouse-benchmark-x.y.z.zip`.  Pick your poison.
 
-The resulting `.zip` or `.tgz` file will have the following contents: 
+The resulting `.zip` or `.tar` file will have the following contents: 
 
 ```text
 ├── CONTRIBUTORS.md
@@ -80,31 +80,31 @@ The resulting `.zip` or `.tgz` file will have the following contents:
 │       └── twitter_user_ids.txt
 ├── lib
 │   └── ...
-└── oltpbench2.jar
+└── lakehouse-benchmark.jar
 ```
 
 ## How to Run
-Once you build and unpack the distribution, you can run `oltpbench2` just like any other executable jar.  The following examples assume you are running from the root of the expanded `.zip` or `.tgz` distribution.  If you attempt to run `oltpbench2` outside of the distribution structure you may encounter a variety of errors including `java.lang.NoClassDefFoundError`.
+Once you build and unpack the distribution, you can run `lakehouse-benchmark` just like any other executable jar.  The following examples assume you are running from the root of the expanded `.zip` or `.tgz` distribution.  If you attempt to run `oltpbench2` outside of the distribution structure you may encounter a variety of errors including `java.lang.NoClassDefFoundError`.
 
 To bring up help contents:
 ```bash
-java -jar oltpbench2.jar -h
+java -jar lakehouse-benchmark.jar -h
 ```
 
 To execute the `tpcc` benchmark:
 ```bash
-java -jar oltpbench2.jar -b tpcc -c config/cockroachdb/sample_tpcc_config.xml --create=true --load=true --execute=true -s 5
+java -jar lakehouse-benchmark.jar -b tpcc -c config/cockroachdb/sample_tpcc_config.xml --create=true --load=true --execute=true -s 5
 ```
 
 For composite benchmarks like `chbenchmark`, which require multiple schemas to be created and loaded, you can provide a comma separated list: `
 ```bash
-java -jar oltpbench2.jar -b tpcc,chbenchmark -c config/cockroachdb/sample_chbenchmark_config.xml --create=true --load=true --execute=true -s 5
+java -jar lakehouse-benchmark.jar -b tpcc,chbenchmark -c config/cockroachdb/sample_chbenchmark_config.xml --create=true --load=true --execute=true -s 5
 ```
 
 The following options are provided:
 
 ```text
-usage: oltpbenchmark
+usage: lakehouse-benchmark
  -b,--bench <arg>               [required] Benchmark class. Currently
                                 supported: [tpcc, tpch, tatp, wikipedia,
                                 resourcestresser, twitter, epinions, ycsb,
