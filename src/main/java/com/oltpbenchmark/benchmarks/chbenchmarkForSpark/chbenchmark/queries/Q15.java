@@ -23,6 +23,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.TableNames.order_line;
+import static com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.TableNames.stock;
+import static com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.TableNames.supplier;
+
 public class Q15 extends GenericQuery {
 
     private static final Boolean IF_IS_NEED_COMMIT = false;
@@ -32,57 +36,43 @@ public class Q15 extends GenericQuery {
         return IF_IS_NEED_COMMIT;
     }
 
-    public final SQLStmt createview_stmt = new SQLStmt(
-            "CREATE view revenue0 (supplier_no, total_revenue) AS "
-                    + "SELECT "
-                    + "mod((s_w_id * s_i_id),10000) as supplier_no, "
-                    + "sum(ol_amount) as total_revenue "
-                    + "FROM "
-                    + "order_line, stock "
-                    + "WHERE "
-                    + "ol_i_id = s_i_id "
-                    + "AND ol_supply_w_id = s_w_id "
-                    + "AND ol_delivery_d >= TIMESTAMP '2007-01-02 00:00:00.000000' "
-                    + "GROUP BY "
-                    + "supplier_no"
-    );
-
     public final SQLStmt query_stmt = new SQLStmt(
-            "SELECT su_suppkey, "
-                    + "su_name, "
-                    + "su_address, "
-                    + "su_phone, "
-                    + "total_revenue "
-                    + "FROM supplier, revenue0 "
-                    + "WHERE su_suppkey = supplier_no "
-                    + "AND total_revenue = (select max(total_revenue) from revenue0) "
-                    + "ORDER BY su_suppkey"
-    );
-
-    public final SQLStmt dropview_stmt = new SQLStmt(
-            "DROP VIEW revenue0"
+        "SELECT su_suppkey, \n" +
+            " su_name, \n" +
+            " su_address, \n" +
+            " su_phone, \n" +
+            " total_revenue \n" +
+            "FROM " +supplier() + ", (\n" +
+            "  SELECT mod((s_w_id * s_i_id),10000) as supplier_no, \n" +
+            "         sum(ol_amount) as total_revenue \n" +
+            "  FROM " +order_line() + "," + stock() + "\n" +
+            "  WHERE ol_i_id = s_i_id \n" +
+            "        AND ol_supply_w_id = s_w_id \n" +
+            "        AND ol_delivery_d >= TIMESTAMP '2007-01-02 00:00:00.000000' \n" +
+            "        GROUP BY mod((s_w_id * s_i_id),10000)\n" +
+            ") \n" +
+            "WHERE su_suppkey = supplier_no \n" +
+            "AND total_revenue = (\n" +
+            "    SELECT max(total_revenue) \n" +
+            "    FROM\n" +
+            "       (\n" +
+            "          SELECT mod((s_w_id * s_i_id),10000) as supplier_no, \n" +
+            "                 sum(ol_amount) as total_revenue \n" +
+            "          FROM " +order_line() +"," +stock()+ "\n" +
+            "          WHERE ol_i_id = s_i_id \n" +
+            "                AND ol_supply_w_id = s_w_id \n" +
+            "                AND ol_delivery_d >= TIMESTAMP '2007-01-02 00:00:00.000000' \n" +
+            "                GROUP BY mod((s_w_id * s_i_id),10000)\n" +
+            "       )\n" +
+            ")\n" +
+            "ORDER BY su_suppkey"
     );
 
     protected SQLStmt get_query() {
         return query_stmt;
     }
 
-    public void run(Connection conn) throws SQLException {
-        // With this query, we have to set up a view before we execute the
-        // query, then drop it once we're done.
-        try (Statement stmt = conn.createStatement()) {
-            try {
-                stmt.executeUpdate(createview_stmt.getSQL());
-                super.run(conn);
-            } finally {
-                stmt.executeUpdate(dropview_stmt.getSQL());
-            }
-        }
-    }
-
     public static void main(String[] args) {
-        System.out.println(new Q15().createview_stmt.getSQL());
-        System.out.println(new Q15().query_stmt.getSQL());
-        System.out.println(new Q15().dropview_stmt.getSQL());
+        System.out.println(new com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.queries.Q15().query_stmt.getSQL());
     }
 }

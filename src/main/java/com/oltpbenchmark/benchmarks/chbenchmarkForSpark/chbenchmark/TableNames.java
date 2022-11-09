@@ -4,55 +4,57 @@ public class TableNames {
 
   private static final String suffix = System.getenv("tpcc_name_suffix") == null ? "" : System.getenv("tpcc_name_suffix");
 
+  private static final String prefix = System.getenv("tpcc_name_prefix") == null ? "" : System.getenv("tpcc_name_prefix");
+
   private static final Boolean isQuote = System.getenv("tpcc_name_isQuote") == null ? false : Boolean.valueOf(System.getenv("tpcc_name_suffix"));
 
 
   public static String warehouse(){
-    return quote("warehouse" + suffix);
+    return quote(prefix + "warehouse" + suffix);
   }
 
   public static String item(){
-    return quote("item" + suffix);
+    return quote(prefix + "item" + suffix);
   }
 
   public static String stock(){
-    return quote("stock" + suffix);
+    return quote(prefix + "stock" + suffix);
   }
 
   public static String district(){
-    return quote("district" + suffix);
+    return quote(prefix + "district" + suffix);
   }
 
   public static String customer(){
-    return quote("customer" + suffix);
+    return quote(prefix + "customer" + suffix);
   }
 
   public static String history(){
-    return quote("history" + suffix);
+    return quote(prefix + "history" + suffix);
   }
 
   public static String oorder(){
-    return quote("oorder" + suffix);
+    return quote(prefix + "oorder" + suffix);
   }
 
   public static String new_order(){
-    return quote("new_order" + suffix);
+    return quote(prefix + "new_order" + suffix);
   }
 
   public static String order_line(){
-    return quote("order_line" + suffix);
+    return quote(prefix + "order_line" + suffix);
   }
 
   public static String region(){
-    return quote("region" + suffix);
+    return quote(prefix + "region" + suffix);
   }
 
   public static String nation(){
-    return quote("nation" + suffix);
+    return quote(prefix + "nation" + suffix);
   }
 
   public static String supplier(){
-    return quote("supplier" + suffix);
+    return quote(prefix + "supplier" + suffix);
   }
 
 
