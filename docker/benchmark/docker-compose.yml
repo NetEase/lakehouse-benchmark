@@ -25,19 +25,19 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./images/hive-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-schema-2.3.0.postgres.sql
-      - ./images/hive-txn-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-txn-schema-2.3.0.postgres.sql
+      - ./images/hive-config/hive-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-schema-2.3.0.postgres.sql
+      - ./images/hive-config/hive-txn-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-txn-schema-2.3.0.postgres.sql
 
 
   metastore:
-    image: nekyuubi/kyuubi-playground-metastore:1.6.0-incubating
+    image: arctic163/benchmark-hive
     container_name: metastore
     hostname: metastore
     ports:
       - 9083
     volumes:
-      - ./images/core-site.xml:/etc/hadoop/conf/core-site.xml
-      - ./images/hive-site.xml:/etc/hive/conf/hive-site.xml
+      - ./images/hive-config/core-site.xml:/etc/hadoop/conf/core-site.xml
+      - ./images/hive-config/hive-site.xml:/etc/hive/conf/hive-site.xml
       - ./hive:/tmp/hive/warehouse
     depends_on:
       - postgres
@@ -47,7 +47,7 @@ services:
     container_name: ams
     hostname: ams
     volumes:
-      - ./data:/tmp/arctic/warehouse
+      - ./arctic:/tmp/arctic/warehouse
     ports:
       - 1630:1630
       - 1260:1260
@@ -55,7 +55,7 @@ services:
     stdin_open: true
 
   trino:
-    image: arctic163/trino
+    image: arctic163/benchmark-trino
     container_name: trino
     hostname: trino
     volumes:
@@ -65,3 +65,29 @@ services:
       - 9001:8080
     depends_on:
       - ams
+      - metastore
+
+  presto:
+    image: arctic163/benchmark-presto
+    container_name: presto
+    hostname: presto
+    volumes:
+      - ./hive:/tmp/hive/warehouse
+    ports:
+      - 9002:8080
+    depends_on:
+      - ams
+      - metastore
+
+  spark:
+    image: arctic163/benchmark_spark
+    container_name: spark
+    hostname: spark
+    volumes:
+      - ./hive:/tmp/hive/warehouse
+      - ./arctic:/tmp/arctic/warehouse
+    ports:
+      - 10000:10000
+    depends_on:
+      - ams
+      - metastore

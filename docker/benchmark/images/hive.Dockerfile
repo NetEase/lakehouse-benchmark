@@ -10,18 +10,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM FROM openjdk:8u332-jdk
+FROM nekyuubi/kyuubi-playground-metastore:1.6.0-incubating
 
-ENV HIVE_HOME=/opt/hive
-ENV HIVE_CONF_DIR=/etc/hive/conf
+WORKDIR /opt/hive
 
-COPY apache-hive-2.3.9-bin.tar.gz /opt
-
-WORKDIR /opt
-
-RUN set -x && \
-    tar -xzf apache-hive-${HIVE_VERSION}-bin.tar.gz -C /opt && \
-    ln -s /opt/apache-hive-${HIVE_VERSION}-bin ${HIVE_HOME} && \
-    rm apache-hive-${HIVE_VERSION}-bin.tar.gz
-
-ENTRYPOINT ["/opt/hive/bin/hive", "--service", "metastore"]
+COPY hive-config/hudi-hadoop-mr-bundle-0.11.1.jar ./auxlib/
