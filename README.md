@@ -18,7 +18,7 @@ Forked from https://github.com/timveil-cockroach/oltpbench with a focus on chben
   The param "terminals" is the query parallelism. "works.work.time" is the 
   duration to run TPC-H query. The shell is
   ```
-  java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/sample_chbenchmark_config.xml --create=false --load=false --execute=true
+  java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/trino_chbenchmark_config.xml --create=false --load=false --execute=true
   ```
 
 Notices:
@@ -27,7 +27,10 @@ Notices:
 3. Many table will with suffix like "oorder_rt, oorder_ro, oorder#base", User can set "export tpcc_name_suffix=_rt" to config suffix. 
 4. Presto jdbc client need two PR [Allow committing empty transaction](https://github.com/prestodb/presto/pull/18136), [Allow AutoCommit](https://github.com/prestodb/presto/pull/18135)
    We supply a can use client in presto-client/ dir, You need to modify and compile code by yourself when you want to use other version
-5. The config trino/sample_chbenchmark_config.xml is for trino, If you use presto you need to modify "driver","url". 
+5. The config trino/trino_chbenchmark_config.xml is for trino, If you use presto you need to use trino/presto_chbenchmark_config.xml:
+   ```
+   java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/presto_chbenchmark_config.xml --create=false --load=false --execute=true
+   ```
 
 
 ## How to Build
