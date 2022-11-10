@@ -15,22 +15,23 @@
  *
  */
 
-package com.oltpbenchmark.benchmarks.tpcds;
 
-import com.oltpbenchmark.api.Procedure;
-import com.oltpbenchmark.api.TransactionType;
-import com.oltpbenchmark.api.Worker;
-import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
+package com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.pojo;
 
-import java.sql.Connection;
+//>>> CH-benCHmark
+public class Region {
 
+    public int r_regionkey; // PRIMARY KEY
+    public String r_name;
+    public String r_comment;
 
-public class TPCDSWorker extends Worker<TPCDSBenchmark> {
-    public TPCDSWorker(TPCDSBenchmark benchmarkModule, int id) {
-        super(benchmarkModule, id);
+    @Override
+    public String toString() {
+        return ("\n***************** Region ********************"
+                + "\n*    r_regionkey = " + r_regionkey + "\n*  r_name = " + r_name
+                + "\n* r_comment = " + r_comment + "\n**********************************************");
     }
 
-    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType txnType) throws Procedure.UserAbortException {
-        return null;
-    }
 }
+
+//<<< CH-benCHmark

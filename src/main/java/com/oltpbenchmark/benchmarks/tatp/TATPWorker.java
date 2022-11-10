@@ -24,6 +24,7 @@ import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.tatp.procedures.*;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,7 +171,7 @@ public class TATPWorker extends Worker<TATPBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException {
         Transaction t = Transaction.get(txnType.getName());
 
 
@@ -181,7 +182,7 @@ public class TATPWorker extends Worker<TATPBenchmark> {
         }
 
         t.invoke(conn, proc, subscriberSize);
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
 }

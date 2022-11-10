@@ -23,6 +23,7 @@ import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.smallbank.procedures.*;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.RandomDistribution.DiscreteRNG;
 import com.oltpbenchmark.util.RandomDistribution.Flat;
 import org.slf4j.Logger;
@@ -100,7 +101,7 @@ public class SmallBankWorker extends Worker<SmallBankBenchmark> {
 
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException {
         Class<? extends Procedure> procClass = txnType.getProcedureClass();
 
         // Amalgamate
@@ -139,7 +140,7 @@ public class SmallBankWorker extends Worker<SmallBankBenchmark> {
 
         }
 
-        return TransactionStatus.SUCCESS;
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
 }

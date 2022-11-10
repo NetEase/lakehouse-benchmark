@@ -26,6 +26,7 @@ import com.oltpbenchmark.benchmarks.twitter.procedures.*;
 import com.oltpbenchmark.benchmarks.twitter.util.TweetHistogram;
 import com.oltpbenchmark.benchmarks.twitter.util.TwitterOperation;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.RandomDistribution.FlatHistogram;
 import com.oltpbenchmark.util.TextGenerator;
 
@@ -49,7 +50,7 @@ public class TwitterWorker extends Worker<TwitterBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
         TwitterOperation t = generator.nextTransaction();
         // zero is an invalid id, so fixing random here to be atleast 1
         t.uid = this.rng().nextInt(this.num_users - 1 ) + 1;
@@ -67,7 +68,7 @@ public class TwitterWorker extends Worker<TwitterBenchmark> {
             String text = TextGenerator.randomStr(this.rng(), len);
             doInsertTweet(conn, t.uid, text);
         }
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     public void doSelect1Tweet(Connection conn, int tweet_id) throws SQLException {

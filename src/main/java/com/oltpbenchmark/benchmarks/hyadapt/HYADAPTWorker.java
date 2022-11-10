@@ -24,6 +24,7 @@ import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.hyadapt.procedures.*;
 import com.oltpbenchmark.distributions.CounterGenerator;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ public class HYADAPTWorker extends Worker<HYADAPTBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException, SQLException {
         Class<? extends Procedure> procClass = nextTrans.getProcedureClass();
 
         if (procClass.equals(ReadRecord1.class)) {
@@ -116,7 +117,7 @@ public class HYADAPTWorker extends Worker<HYADAPTBenchmark> {
             sumRecord10(conn);
         }
 
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     /////////////////////////

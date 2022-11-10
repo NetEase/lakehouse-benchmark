@@ -15,40 +15,35 @@
  *
  */
 
-package com.oltpbenchmark.benchmarks.tpch;
+package com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark;
 
 import com.oltpbenchmark.api.Procedure.UserAbortException;
 import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
-import com.oltpbenchmark.benchmarks.tpch.procedures.GenericQuery;
+import com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.queries.GenericQuery;
 import com.oltpbenchmark.types.TransactionStatus;
 import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
-import com.oltpbenchmark.util.RandomGenerator;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class TPCHWorker extends Worker<TPCHBenchmark> {
-
-    private final RandomGenerator rand;
-
-    public TPCHWorker(TPCHBenchmark benchmarkModule, int id) {
+public class CHBenCHmarkWorker extends Worker<CHBenCHmark> {
+    public CHBenCHmarkWorker(CHBenCHmark benchmarkModule, int id) {
         super(benchmarkModule, id);
-        this.rng().setSeed(15721);
-        rand = new RandomGenerator(this.rng().nextInt());
     }
 
     @Override
     protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTransaction) throws UserAbortException, SQLException {
+        Boolean isCommit;
         try {
             GenericQuery proc = (GenericQuery) this.getProcedure(nextTransaction.getProcedureClass());
-            proc.run(conn, rand);
+            isCommit = proc.get_isCommit();
+            proc.run(conn);
         } catch (ClassCastException e) {
             throw new RuntimeException(e);
         }
 
-        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS, isCommit);
 
     }
 }
-

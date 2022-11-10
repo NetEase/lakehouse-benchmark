@@ -22,6 +22,7 @@ import com.oltpbenchmark.api.Procedure.UserAbortException;
 import com.oltpbenchmark.types.DatabaseType;
 import com.oltpbenchmark.types.State;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.Histogram;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -359,17 +360,21 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         LOG.debug(String.format("%s %s attempting...", this, transactionType));
                     }
 
-                    status = this.executeWork(conn, transactionType);
+                    TransactionStatusAndIsCommit transactionStatusAndIsCommit = this.executeWork(conn, transactionType);
+                    status = transactionStatusAndIsCommit.getTransactionStatus();
+                    Boolean isCommit = transactionStatusAndIsCommit.getIsCommit();
+
 
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(String.format("%s %s completed with status [%s]...", this, transactionType, status.name()));
                     }
 
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(String.format("%s %s committing...", this, transactionType));
+                    if (isCommit){
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug(String.format("%s %s committing...", this, transactionType));
+                        }
+                        conn.commit();
                     }
-
-                    conn.commit();
 
                     break;
 
@@ -383,8 +388,6 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     break;
 
                 } catch (SQLException ex) {
-                    conn.rollback();
-
                     if (isRetryable(ex)) {
                         LOG.warn(String.format("Retryable SQLException occurred during [%s]... current retry attempt [%d], max retry attempts [%d], sql state [%s], error code [%d].", transactionType, retryCount, maxRetryCount, ex.getSQLState(), ex.getErrorCode()), ex);
 
@@ -396,6 +399,8 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
 
                         status = TransactionStatus.ERROR;
                     }
+
+                    conn.rollback();
 
                 } finally {
 
@@ -490,7 +495,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
      * @throws UserAbortException TODO
      * @throws SQLException       TODO
      */
-    protected abstract TransactionStatus executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException;
+    protected abstract TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType txnType) throws UserAbortException, SQLException;
 
     /**
      * Called at the end of the test to do any clean up that may be required.

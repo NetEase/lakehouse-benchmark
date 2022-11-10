@@ -23,6 +23,7 @@ import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.tpcc.procedures.TPCCProcedure;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +63,7 @@ public class TPCCWorker extends Worker<TPCCBenchmark> {
      * Executes a single TPCC transaction of type transactionType.
      */
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTransaction) throws UserAbortException, SQLException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTransaction) throws UserAbortException, SQLException {
         try {
             TPCCProcedure proc = (TPCCProcedure) this.getProcedure(nextTransaction.getProcedureClass());
             proc.run(conn, gen, terminalWarehouseID, numWarehouses,
@@ -72,6 +73,6 @@ public class TPCCWorker extends Worker<TPCCBenchmark> {
             LOG.error("We have been invoked with an INVALID transactionType?!", ex);
             throw new RuntimeException("Bad transaction type = " + nextTransaction);
         }
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 }

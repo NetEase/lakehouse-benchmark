@@ -23,6 +23,7 @@ import com.oltpbenchmark.api.TransactionType;
 import com.oltpbenchmark.api.Worker;
 import com.oltpbenchmark.benchmarks.epinions.procedures.*;
 import com.oltpbenchmark.types.TransactionStatus;
+import com.oltpbenchmark.types.TransactionStatusAndIsCommit;
 import com.oltpbenchmark.util.TextGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public class EpinionsWorker extends Worker<EpinionsBenchmark> {
     }
 
     @Override
-    protected TransactionStatus executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException {
+    protected TransactionStatusAndIsCommit executeWork(Connection conn, TransactionType nextTrans) throws UserAbortException {
 
         boolean successful = false;
         while (!successful) {
@@ -77,7 +78,7 @@ public class EpinionsWorker extends Worker<EpinionsBenchmark> {
             }
         }
 
-        return (TransactionStatus.SUCCESS);
+        return new TransactionStatusAndIsCommit(TransactionStatus.SUCCESS);
     }
 
     public void reviewItemByID(Connection conn) throws SQLException {

@@ -32,7 +32,8 @@ public enum DatabaseType {
     MYSQL(true, false),
     POSTGRES(false, false),
     COCKROACHDB(false, false),
-    TRINO(true, false);
+    TRINO(true, false),
+    HIVE(true,false);
 
     DatabaseType(boolean escapeNames, boolean includeColNames) {
         this.escapeNames = escapeNames;

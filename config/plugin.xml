@@ -17,4 +17,5 @@
     <plugin name="smallbank">com.oltpbenchmark.benchmarks.smallbank.SmallBankBenchmark</plugin>
     <plugin name="hyadapt">com.oltpbenchmark.benchmarks.hyadapt.HYADAPTBenchmark</plugin>
     <plugin name="chbenchmarkForTrino">com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.CHBenCHmark</plugin>
+    <plugin name="chbenchmarkForSpark">com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.CHBenCHmark</plugin>
 </plugins>
