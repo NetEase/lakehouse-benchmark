@@ -155,6 +155,14 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>Impala</groupId>
+            <artifactId>ImpalaJDBC41</artifactId>
+            <version>2.6.12.1013</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ImpalaJDBC41.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -182,6 +190,9 @@
                             <classpathPrefix>lib</classpathPrefix>
                             <mainClass>com.oltpbenchmark.DBWorkload</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <Class-Path>lib/ImpalaJDBC41.jar</Class-Path>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
