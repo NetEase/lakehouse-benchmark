@@ -2,54 +2,50 @@
 <parameters>
 
     <!-- Connection details -->
-    <type>MYSQL</type>
-    <driver>com.mysql.cj.jdbc.Driver</driver>
-    <url>jdbc:mysql://mysql:3306/oltpbench?rewriteBatchedStatements=true</url>
-<!--    <url>jdbc:mysql://hz11-trino-arctic-0.jd.163.org:3306/icebergdb10w?rewriteBatchedStatements=true</url>-->
-    <username>root</username>
-    <password>password</password>
-    <isolation>TRANSACTION_REPEATABLE_READ</isolation>
+    <type>TRINO</type>
+    <driver>com.facebook.presto.jdbc.PrestoDriver</driver>
+    <url>jdbc:presto://ams:1260/local_catalog/benchmark</url>
+    <username>benchmark</username>
+<!--    <password>benchmark</password>-->
+    <isolation>TRANSACTION_READ_UNCOMMITTED</isolation>
     <batchsize>128</batchsize>
 
     <!-- Scale factor is the number of warehouses in TPCC -->
-    <scalefactor>2</scalefactor>
+    <scalefactor>1</scalefactor>
 
     <!-- The workload -->
+
     <!-- Number of terminal per workload -->
-    <terminals>4</terminals>
+    <terminals>1</terminals>
 
     <!-- Extra Features (Commented Out) -->
     <!-- Can be workload-specific -->
-<!--    <terminals bench="tpcc">128</terminals>-->
+    <!-- <terminals bench="tpcc">2</terminals> -->
 
     <!-- Workload-specific options a marked with @bench=[workload_name] -->
     <!-- Workload-specific number of terminals -->
     <!-- <terminals bench="chbenchmark">2</terminals> -->
 
     <works>
+
+        <!-- A Basic WorkPhase for Mixed Workloads -->
         <work>
-            <!--            需要测试至少10min左右-->
             <time>1800</time>
 
-<!--            <rate bench="tpcc">2000</rate>-->
-            <rate bench="tpcc">unlimited</rate>
-
-            <rate bench="chbenchmark">disabled</rate>
-
-            <!-- NOTE: TPCC workers won't be distributed evenly between warehouses if not all workers are active -->
-            <!--            <active_terminals>4</active_terminals>-->
-<!--            <active_terminals bench="tpcc">128</active_terminals>-->
-
-            <!-- Specifies transaction weight for each workload. -->
+            <!-- Note: The rate can be set to UNLIMITED or DISABLED -->
+            <rate>200</rate>
+            <rate bench="tpcc">disabled</rate>
+            <rate bench="chbenchmarkForTrino">unlimited</rate>
+            <!-- Need to Specify transaction weights for each workload .. Otherwise the number of fields won't match -->
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmark">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
-
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
+
     </works>
 
 
     <!-- CH specific -->
-    <transactiontypes bench="chbenchmark">
+    <transactiontypes bench="chbenchmarkForTrino">
         <transactiontype>
             <name>Q1</name>
         </transactiontype>

@@ -54,4 +54,8 @@ public class Q5 extends GenericQuery {
     protected SQLStmt get_query() {
         return query_stmt;
     }
+
+    public static void main(String[] args) {
+        System.out.println(new Q5().query_stmt.getSQL());
+    }
 }
