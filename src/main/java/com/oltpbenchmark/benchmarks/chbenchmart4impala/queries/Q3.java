@@ -31,7 +31,7 @@ public class Q3 extends GenericQuery {
             + "WHERE c_state LIKE 'A%') t1 join " + oorder() + " "
             + "WHERE o_entry_d > CAST('2007-01-02 00:00:00.000000' AS TIMESTAMP) "
             + "AND t1.c_id = o_c_id AND t1.c_w_id = o_w_id AND t1.c_d_id = o_d_id) t2 "
-            + "join + " +new_order() + ", "  +order_line()  + " "
+            + "join " +new_order() + ", "  +order_line()  + " "
             + "WHERE no_w_id = t2.o_w_id "
             + "AND no_d_id = t2.o_d_id AND no_o_id = t2.o_id AND ol_w_id = t2.o_w_id "
             + "AND ol_d_id = t2.o_d_id AND ol_o_id = t2.o_id "
