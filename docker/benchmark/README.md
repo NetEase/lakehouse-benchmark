@@ -16,7 +16,7 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
    ```
    进入容器后执行
    ```
-    java -jar /usr/lib/oltpbench/lakehouse-benchmark-21-SNAPSHOT/lakehouse-benchmark.jar -b tpcc,chbenchmark -c /usr/lib/oltpbench/lakehouse-benchmark-21-SNAPSHOT/config/mysql/sample_chbenchmark_config.xml --create=true --load=true
+    java -jar lakehouse-benchmark.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --create=true --load=true
    ```
    生成静态数据进入 mysql。
  - 使用如下命令进入 lakehouse-benchmark-ingestion 容器。
@@ -27,9 +27,18 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
    . 
    .
    .
- - 等 lakehouse-benchmark-ingestion 容器同步完数据以后在进入lakehouse-benchmark 容器，进行查询性能测试
+ - 等 lakehouse-benchmark-ingestion 容器同步完数据以后在进入lakehouse-benchmark 容器，进行静态数据查询性能测试
    ```
-   
+   java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/trino_chbenchmark_config.xml --create=false --load=false --execute=true
+   ```
+ - 上述测试的是静态数据，数据中不包含 update，delete，如果想测试动态数据需要边向 Mysql 造数据边测试查询，进入 lakehouse-benchmark-ingestion 容器
+   先执行产生tpcc数据的命令：
+   ```
+   nohup java -jar lakehouse-benchmark.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --execute=true -s 5 >> run.log1 2>&1 &
+   ```
+   然后同时执行tpch性能查询的命令：
+   ```
+   nohup java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/trino_chbenchmark_config.xml --create=false --load=false --execute=true >> run.log2 2>&1 &
    ```
    
    

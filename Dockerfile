@@ -13,6 +13,8 @@ WORKDIR /usr/lib/oltpbench
 COPY target/lakehouse-benchmark-${VERSION}.tar ./
 RUN tar -xvf lakehouse-benchmark-${VERSION}.tar
 
+WORKDIR /usr/lib/oltpbench/lakehouse-benchmark-21-SNAPSHOT/
+
 CMD ["/bin/bash"]
 
 
