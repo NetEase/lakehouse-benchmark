@@ -107,8 +107,14 @@ services:
     image: arctic163/benchmark-ingestion
     container_name: lakehouse-benchmark-ingestion
     hostname: lakehouse-benchmark-ingestion
+    volumes:
+      - ./hive:/tmp/hive/warehouse
+      - ./arctic:/tmp/arctic/warehouse
     depends_on:
       - mysql
       - ams
+      - metastore
     tty: true
     stdin_open: true
+    ports:
+      - "8081:8081"
