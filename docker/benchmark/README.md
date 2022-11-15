@@ -31,7 +31,7 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
    ```
    java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/trino_chbenchmark_config.xml --create=false --load=false --execute=true
    ```
- - 上述测试的是静态数据，数据中不包含 update，delete，如果想测试动态数据需要边向 Mysql 造数据边测试查询，进入 lakehouse-benchmark-ingestion 容器
+ - 上述测试的是静态数据，数据中不包含 update，delete，如果想测试动态数据需要边向 Mysql 造数据边测试查询，进入 lakehouse-benchmark 容器
    先执行产生tpcc数据的命令：
    ```
    nohup java -jar lakehouse-benchmark.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --execute=true -s 5 >> run.log1 2>&1 &
@@ -41,4 +41,5 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
    nohup java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/trino_chbenchmark_config.xml --create=false --load=false --execute=true >> run.log2 2>&1 &
    ```
    
-   
+ 进入 lakehouse-benchmark 容器，配置放在 config 目录下，如果想要测试 hudi 需要使用 config/trino/presto_chbenchmark_config.xml 配置文件，
+ 如果需要测试 iceberg 等库需要修改 config/trino/trino_chbenchmark_config.xml 里面的 catalog 和 database 名称。
