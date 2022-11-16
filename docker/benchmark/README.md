@@ -23,10 +23,12 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
    ```
    docker exec -it lakehouse-benchmark-ingestion /bin/bash
    ```
-   .
-   . 
-   .
-   .
+   进入容器后执行
+   ``` 
+   java -cp eduard-1.0-SNAPSHOT.jar com.netease.arctic.benchmark.ingestion.MainRunner -confDir /usr/lib/benchmark-ingestion/conf  -sinkType [arctic/iceberg/hudi] -sinkDatabase [dbName]
+   ```
+   命令行参数的具体说明请参考[lakehouse-benchmark-ingestion](https://github.com/NetEase/lakehouse-benchmark-ingestion)
+ - 通过宿主机上的localhost:8081页面打开 Flink Web UI，观察数据同步情况。
  - 等 lakehouse-benchmark-ingestion 容器同步完数据以后在进入lakehouse-benchmark 容器，进行静态数据查询性能测试
    ```
    java -jar lakehouse-benchmark.jar -b chbenchmarkForTrino -c config/trino/trino_chbenchmark_config.xml --create=false --load=false --execute=true
