@@ -88,6 +88,7 @@ services:
       - ./hive:/tmp/hive/warehouse
       - ./arctic:/tmp/arctic/warehouse
       - ./images/hive-config/hive-site.xml:/usr/local/arctic_spark/spark-3.1.3-bin-hadoop2.7/conf/hive-site.xml
+      - ./images/spark-config/spark-defaults.conf:/usr/local/arctic_spark/spark-3.1.3-bin-hadoop2.7/conf/spark-defaults.conf
     ports:
       - 10000:10000
     depends_on:
