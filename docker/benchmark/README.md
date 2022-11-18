@@ -16,16 +16,16 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
    ```
    进入容器后执行
    ```
-    java -jar lakehouse-benchmark.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --create=true --load=true
+     java -jar lakehouse-benchmark.jar -b tpcc,chbenchmark -c config/mysql/sample_chbenchmark_config.xml --create=true --load=true
    ```
    生成静态数据进入 mysql。
- - 使用如下命令进入 lakehouse-benchmark-ingestion 容器。
+ - 使用如下命令进入 lakehouse-ingestion 容器。
    ```
-   docker exec -it lakehouse-benchmark-ingestion /bin/bash
+   docker exec -it benchmark-lakehouse-ingestion /bin/bash
    ```
    进入容器后执行
    ```
-   java -cp lakehouse-benchmark-ingestion-1.0-SNAPSHOT.jar com.netease.arctic.benchmark.ingestion.MainRunner -confDir /usr/lib/benchmark-ingestion/conf -sinkType [arctic/iceberg/hudi] -sinkDatabase [dbName]
+   java -cp lakehouse-benchmark-ingestion-1.0-SNAPSHOT.jar com.netease.arctic.benchmark.ingestion.MainRunner -confDir /usr/lib/lakehouse_benchmark_ingestion/conf -sinkType [arctic/iceberg/hudi] -sinkDatabase [arctic/iceberg/hudi]
    ```
    命令行参数的具体说明请参考[lakehouse-benchmark-ingestion](https://github.com/NetEase/lakehouse-benchmark-ingestion)
  - 通过宿主机上的localhost:8081页面打开 Flink Web UI，观察数据同步情况。

@@ -10,27 +10,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_ROOT_HOST: "%"
-      MYSQL_DATABASE: oltpbench
+      MYSQL_DATABASE: metastore
     ports:
       - "3306:3306"
-
-  postgres:
-    image: postgres:12
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: metastore
-    container_name: postgres
-    hostname: postgres
-    ports:
-      - 5432:5432
     volumes:
-      - ./images/hive-config/hive-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-schema-2.3.0.postgres.sql
-      - ./images/hive-config/hive-txn-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-txn-schema-2.3.0.postgres.sql
-
+      - ./images/scripts/hive-schema-2.3.0.mysql.sql:/docker-entrypoint-initdb.d/hive-schema-2.3.0.mysql.sql
+      - ./images/scripts/hive-txn-schema-2.3.0.mysql.sql:/docker-entrypoint-initdb.d/hive-txn-schema-2.3.0.mysql.sql
+      - ./images/scripts/arctic-init.sql:/docker-entrypoint-initdb.d/arctic-init.sql
 
   metastore:
-    image: arctic163/benchmark-hive
+    image: arctic163/benchmark-metastore:${BENCHMARK_VERSION}
     container_name: metastore
     hostname: metastore
     ports:
@@ -40,14 +29,15 @@ services:
       - ./images/hive-config/hive-site.xml:/etc/hive/conf/hive-site.xml
       - ./hive:/tmp/hive/warehouse
     depends_on:
-      - postgres
+      - mysql
 
   ams:
-    image: arctic163/ams
+    image: arctic163/benchmark-ams:${BENCHMARK_VERSION}
     container_name: ams
     hostname: ams
     volumes:
       - ./arctic:/tmp/arctic/warehouse
+      - ./images/ams-config/arctic-config.yaml:/opt/arctic/conf/config.yaml
     ports:
       - 1630:1630
       - 1260:1260
@@ -55,12 +45,15 @@ services:
     stdin_open: true
 
   trino:
-    image: arctic163/benchmark-trino
+    image: arctic163/benchmark-trino:${BENCHMARK_VERSION}
     container_name: trino
     hostname: trino
     volumes:
       - ./arctic:/tmp/arctic/warehouse
       - ./hive:/tmp/hive/warehouse
+      - ./images/trino-presto-config/local_catalog.properties:/etc/trino/catalog/local_catalog.properties
+      - ./images/trino-presto-config/iceberg.properties:/etc/trino/catalog/iceberg.properties
+      - ./images/trino-presto-config/delta-lake.properties:/etc/trino/catalog/delta-lake.properties
     ports:
       - 9001:8080
     depends_on:
@@ -68,11 +61,12 @@ services:
       - metastore
 
   presto:
-    image: arctic163/benchmark-presto
+    image: ahanaio/prestodb-sandbox:0.274
     container_name: presto
     hostname: presto
     volumes:
       - ./hive:/tmp/hive/warehouse
+      - ./images/trino-presto-config/hudi.properties:/opt/presto-server/etc/catalog/hudi.properties
     ports:
       - 9002:8080
     depends_on:
@@ -80,7 +74,7 @@ services:
       - metastore
 
   spark:
-    image: arctic163/benchmark-spark
+    image: arctic163/benchmark-spark:${BENCHMARK_VERSION}
     container_name: spark
     hostname: spark
     command: ["bash","-c","./sbin/start-thriftserver.sh && tail -f /dev/null"]
@@ -96,21 +90,28 @@ services:
       - metastore
 
   lakehouse-benchmark:
-    image: arctic163/lakehouse-benchmark
+    image: arctic163/lakehouse-benchmark:${BENCHMARK_VERSION}
     container_name: lakehouse-benchmark
     hostname: lakehouse-benchmark
+    volumes:
+      - ./images/benchmark-config/sample_chbenchmark_config.xml:/usr/lib/lakehouse-benchmark/config/mysql/sample_chbenchmark_config.xml
+      - ./images/benchmark-config/presto_chbenchmark_config.xml:/usr/lib/lakehouse-benchmark/config/trino/presto_chbenchmark_config.xml
+      - ./images/benchmark-config/trino_chbenchmark_config.xml:/usr/lib/lakehouse-benchmark/config/trino/trino_chbenchmark_config.xml
     depends_on:
       - trino
+      - mysql
     tty: true
     stdin_open: true
 
   lakehouse-benchmark-ingestion:
-    image: arctic163/benchmark-ingestion
-    container_name: lakehouse-benchmark-ingestion
-    hostname: lakehouse-benchmark-ingestion
+    image: arctic163/benchmark-lakehouse-ingestion:${BENCHMARK_VERSION}
+    container_name: benchmark-lakehouse-ingestion
+    hostname: benchmark-lakehouse-ingestion
+    privileged: true
     volumes:
       - ./hive:/tmp/hive/warehouse
       - ./arctic:/tmp/arctic/warehouse
+      - ./images/ingestion-config/ingestion-conf.yaml:/usr/lib/lakehouse_benchmark_ingestion/conf/ingestion-conf.yaml
     depends_on:
       - mysql
       - ams

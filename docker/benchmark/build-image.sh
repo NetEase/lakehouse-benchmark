@@ -17,14 +17,81 @@
 # APACHE_MIRROR=mirrors.cloud.tencent.com/apache
 # MAVEN_MIRROR=mirrors.cloud.tencent.com/maven
 
+
 set -e
 
-docker buildx build --platform linux/arm64,linux/amd64 -t arctic163/lakehouse-benchmark  ./images --push
+APACHE_MIRROR=${APACHE_MIRROR:-https://dlcdn.apache.org}
+MAVEN_MIRROR=${MAVEN_MIRROR:-https://mirrors.cloud.tencent.com/maven}
+BUILD_CMD="docker build"
 
-docker buildx build --platform linux/arm64,linux/amd64 -t arctic163/benchmark-presto -f benchmark-presto.Dockerfile ./images --push
+if [ $BUILDX ]; then
+  echo "Using buildx to build cross-platform images"
+  BUILD_CMD="docker buildx build --platform=linux/amd64,linux/arm64 --push"
+fi
 
-docker buildx build --platform linux/arm64,linux/amd64 -t arctic163/benchmark-trino -f benchmark-trino.Dockerfile ./images --push
+SELF_DIR="$(cd "$(dirname "$0")"; pwd)"
 
-docker buildx build --platform linux/arm64,linux/amd64 -t arctic163/benchmark-hive -f benchmark-hive.Dockerfile ./images --push
+source "${SELF_DIR}/.env"
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --build-arg APACHE_MIRROR=${APACHE_MIRROR} \
+  --build-arg MAVEN_MIRROR=${MAVEN_MIRROR} \
+  --file "${SELF_DIR}/images/benchmark-base.Dockerfile" \
+  --tag arctic163/benchmark-base:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --build-arg APACHE_MIRROR=${APACHE_MIRROR} \
+  --build-arg MAVEN_MIRROR=${MAVEN_MIRROR} \
+  --build-arg HADOOP_VERSION=${HADOOP_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-hadoop.Dockerfile" \
+  --tag arctic163/benchmark-hadoop:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --build-arg APACHE_MIRROR=${APACHE_MIRROR} \
+  --build-arg MAVEN_MIRROR=${MAVEN_MIRROR} \
+  --build-arg HIVE_VERSION=${HIVE_VERSION} \
+  --build-arg MYSQL_VERSION=${MYSQL_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-metastore.Dockerfile" \
+  --tag arctic163/benchmark-metastore:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --build-arg MAVEN_MIRROR=${MAVEN_MIRROR} \
+  --build-arg ARCTIC_VERSION=${ARCTIC_VERSION} \
+  --build-arg ARCTIC_HADOOP_VERSION=${ARCTIC_HADOOP_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-ams.Dockerfile" \
+  --tag arctic163/benchmark-ams:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-lakehouse.Dockerfile" \
+  --tag arctic163/lakehouse-benchmark:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-lakehouse-ingestion.Dockerfile" \
+  --tag arctic163/benchmark-lakehouse-ingestion:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-spark.Dockerfile" \
+  --tag arctic163/benchmark-spark:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-trino.Dockerfile" \
+  --tag arctic163/benchmark-trino:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
 
 

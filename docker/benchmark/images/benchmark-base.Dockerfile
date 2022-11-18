@@ -10,8 +10,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM nekyuubi/kyuubi-playground-metastore:1.6.0-incubating
+FROM eclipse-temurin:8-focal
 
-WORKDIR /opt/hive
+RUN set -x && \
+    ln -snf /usr/bin/bash /usr/bin/sh && \
+    apt-get update -q && \
+    apt-get install -yq retry busybox && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir /opt/busybox && \
+    busybox --install /opt/busybox
 
-COPY hive-config/hudi-hadoop-mr-bundle-0.11.1.jar ./auxlib/
+ENV PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/busybox
