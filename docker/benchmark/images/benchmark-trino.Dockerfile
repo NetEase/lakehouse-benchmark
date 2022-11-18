@@ -12,8 +12,8 @@
 
 FROM trinodb/trino:380
 
-ARG ARCTIC_VERSION=0.3.2
-ARG RELEASE=v0.3.2-rc1
+ARG ARCTIC_VERSION
+ARG ARCTIC_RELEASE
 
 USER root
 
@@ -23,7 +23,7 @@ USER trino:trino
 
 WORKDIR /usr/lib/trino/plugin/arctic
 
-RUN wget https://github.com/NetEase/arctic/releases/download/v0.3.2-rc1/trino-arctic-0.3.2.tar.gz \
+RUN wget https://github.com/NetEase/arctic/releases/download/${ARCTIC_RELEASE}/trino-arctic-${ARCTIC_VERSION}.tar.gz \
     && tar -zxvf trino-arctic-${ARCTIC_VERSION}.tar.gz  \
     && rm -f trino-arctic-${ARCTIC_VERSION}.tar.gz  \
     && mv trino-arctic-${ARCTIC_VERSION}/lib/* . \

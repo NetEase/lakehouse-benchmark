@@ -3,8 +3,8 @@
 
     <!-- Connection details -->
     <type>TRINO</type>
-    <driver>com.facebook.presto.jdbc.PrestoDriver</driver>
-    <url>jdbc:presto://presto:8080/local_catalog/benchmark</url>
+    <driver>io.trino.jdbc.TrinoDriver</driver>
+    <url>jdbc:trino://trino:8080/iceberg/iceberg</url>
     <username>benchmark</username>
 <!--    <password>benchmark</password>-->
     <isolation>TRANSACTION_READ_UNCOMMITTED</isolation>

@@ -95,8 +95,9 @@ services:
     hostname: lakehouse-benchmark
     volumes:
       - ./images/benchmark-config/sample_chbenchmark_config.xml:/usr/lib/lakehouse-benchmark/config/mysql/sample_chbenchmark_config.xml
-      - ./images/benchmark-config/presto_chbenchmark_config.xml:/usr/lib/lakehouse-benchmark/config/trino/presto_chbenchmark_config.xml
-      - ./images/benchmark-config/trino_chbenchmark_config.xml:/usr/lib/lakehouse-benchmark/config/trino/trino_chbenchmark_config.xml
+      - ./images/benchmark-config/presto_hudi_config.xml:/usr/lib/lakehouse-benchmark/config/trino/presto_hudi_config.xml
+      - ./images/benchmark-config/trino_arctic_config.xml:/usr/lib/lakehouse-benchmark/config/trino/trino_arctic_config.xml
+      - ./images/benchmark-config/trino_iceberg_config.xml:/usr/lib/lakehouse-benchmark/config/trino/trino_iceberg_config.xml
     depends_on:
       - trino
       - mysql

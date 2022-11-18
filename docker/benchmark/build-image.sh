@@ -64,6 +64,7 @@ ${BUILD_CMD} \
   --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
   --build-arg MAVEN_MIRROR=${MAVEN_MIRROR} \
   --build-arg ARCTIC_VERSION=${ARCTIC_VERSION} \
+  --build-arg ARCTIC_RELEASE=${ARCTIC_RELEASE} \
   --build-arg ARCTIC_HADOOP_VERSION=${ARCTIC_HADOOP_VERSION} \
   --file "${SELF_DIR}/images/benchmark-ams.Dockerfile" \
   --tag arctic163/benchmark-ams:${BENCHMARK_VERSION} \
@@ -90,6 +91,8 @@ ${BUILD_CMD} \
 
 ${BUILD_CMD} \
   --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --build-arg ARCTIC_VERSION=${ARCTIC_VERSION} \
+  --build-arg ARCTIC_RELEASE=${ARCTIC_RELEASE} \
   --file "${SELF_DIR}/images/benchmark-trino.Dockerfile" \
   --tag arctic163/benchmark-trino:${BENCHMARK_VERSION} \
   "${SELF_DIR}/images" $@
