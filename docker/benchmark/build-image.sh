@@ -84,7 +84,13 @@ ${BUILD_CMD} \
   "${SELF_DIR}/images" $@
 
 ${BUILD_CMD} \
-  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --build-arg APACHE_MIRROR=${APACHE_MIRROR} \
+  --build-arg MAVEN_MIRROR=${MAVEN_MIRROR} \
+  --build-arg SPARK_VERSION=${SPARK_VERSION} \
+  --build-arg SPARK_BINARY_VERSION=${SPARK_BINARY_VERSION} \
+  --build-arg ARCTIC_VERSION=${ARCTIC_VERSION} \
+  --build-arg ARCTIC_RELEASE=${ARCTIC_RELEASE} \
+  --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION} \
   --file "${SELF_DIR}/images/benchmark-spark.Dockerfile" \
   --tag arctic163/benchmark-spark:${BENCHMARK_VERSION} \
   "${SELF_DIR}/images" $@
