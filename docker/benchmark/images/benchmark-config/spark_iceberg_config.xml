@@ -4,7 +4,7 @@
     <!-- Connection details -->
     <type>HIVE</type>
     <driver>org.apache.hive.jdbc.HiveDriver</driver>
-    <url>jdbc:hive2://spark:10000/iceberg_catalog</url>
+    <url>jdbc:hive2://spark:10000/iceberg_catalog.iceberg</url>
     <username>hdfs</username>
 <!--    <password>benchmark</password>-->
     <isolation>TRANSACTION_READ_UNCOMMITTED</isolation>
