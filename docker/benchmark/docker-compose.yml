@@ -54,7 +54,7 @@ services:
       - ./images/trino-presto-config/iceberg.properties:/etc/trino/catalog/iceberg.properties
       - ./images/trino-presto-config/delta-lake.properties:/etc/trino/catalog/delta-lake.properties
     ports:
-      - 9003:8080
+      - 9001:8080
     depends_on:
       - ams
       - metastore
@@ -67,7 +67,7 @@ services:
       - ./hive:/tmp/hive/warehouse
       - ./images/trino-presto-config/hudi.properties:/opt/presto-server/etc/catalog/hudi.properties
     ports:
-      - 9004:8080
+      - 9002:8080
     depends_on:
       - ams
       - metastore
