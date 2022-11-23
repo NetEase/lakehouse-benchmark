@@ -93,64 +93,64 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
        --create=false --load=false --execute=true
      ```
       
-   - 上述测试的是静态数据，数据中不包含 update，delete，如果想测试动态数据需要边向 Mysql 造数据边测试查询，
-     进入 lakehouse-benchmark 容器执行命令向 Mysql 里生产增量数据，这些数据会通过已经运行的数据同步工具源源不断写入数据湖：
+ - 上述测试的是静态数据，数据中不包含 update，delete，如果想测试动态数据需要边向 Mysql 造数据边测试查询，
+   进入 lakehouse-benchmark 容器执行命令向 Mysql 里生产增量数据，这些数据会通过已经运行的数据同步工具源源不断写入数据湖：
+   ```
+   docker exec -it lakehouse-benchmark \
+     java -jar lakehouse-benchmark.jar \
+     -b tpcc,chbenchmark \
+     -c config/mysql/sample_chbenchmark_config.xml \
+     --execute=true -s 5
+   ```
+ - 再新建一个窗口，然后同时执行 TPCH 性能查询的命令 (Trino) ：
+   - Arctic
      ```
      docker exec -it lakehouse-benchmark \
-       java -jar lakehouse-benchmark.jar \
-       -b tpcc,chbenchmark \
-       -c config/mysql/sample_chbenchmark_config.xml \
-       --execute=true -s 5
+      java -jar lakehouse-benchmark.jar \
+      -b chbenchmarkForTrino \
+      -c config/trino/trino_arctic_config.xml \
+      --create=false --load=false --execute=true
      ```
-     再新建一个窗口，然后同时执行 TPCH 性能查询的命令 (Trino) ：
-     - Arctic
-     ```
-     docker exec -it lakehouse-benchmark \
-       java -jar lakehouse-benchmark.jar \
-       -b chbenchmarkForTrino \
-       -c config/trino/trino_arctic_config.xml \
-       --create=false --load=false --execute=true
-     ```
-     - Iceberg
+   - Iceberg
      ```
      docker exec -it lakehouse-benchmark \
-       java -jar lakehouse-benchmark.jar \
-       -b chbenchmarkForTrino \
-       -c config/trino/trino_iceberg_config.xml \
-       --create=false --load=false --execute=true
+      java -jar lakehouse-benchmark.jar \
+      -b chbenchmarkForTrino \
+      -c config/trino/trino_iceberg_config.xml \
+      --create=false --load=false --execute=true
      ```
-     - Hudi
+   - Hudi
      ```
      docker exec -it lakehouse-benchmark \
-       java -jar lakehouse-benchmark.jar \
-       -b chbenchmarkForTrino \
-       -c config/trino/presto_hudi_config.xml \
-       --create=false --load=false --execute=true
+      java -jar lakehouse-benchmark.jar \
+      -b chbenchmarkForTrino \
+      -c config/trino/presto_hudi_config.xml \
+      --create=false --load=false --execute=true
      ```
-     也可以使用 Spark ：
-     - Arctic
-       ```
-       docker exec -it lakehouse-benchmark \
-         java -jar lakehouse-benchmark.jar \
-         -b chbenchmarkForSpark \
-         -c config/spark/spark_arctic_config.xml \
-         --create=false --load=false --execute=true
-       ```
-     - Iceberg
-       ```
-       docker exec -it lakehouse-benchmark \
-         java -jar lakehouse-benchmark.jar \
-         -b chbenchmarkForSpark \
-         -c config/spark/spark_iceberg_config.xml \
-         --create=false --load=false --execute=true
-       ```
-     - Hudi
-       ```
-       docker exec -it lakehouse-benchmark \
-         java -jar lakehouse-benchmark.jar \
-         -b chbenchmarkForSpark \
-         -c config/spark/spark_hudi_config.xml \
-         --create=false --load=false --execute=true
-       ```
+ - 也可以使用 Spark ：
+   - Arctic
+      ```
+      docker exec -it lakehouse-benchmark \
+        java -jar lakehouse-benchmark.jar \
+        -b chbenchmarkForSpark \
+        -c config/spark/spark_arctic_config.xml \
+        --create=false --load=false --execute=true
+      ```
+   - Iceberg
+      ```
+      docker exec -it lakehouse-benchmark \
+        java -jar lakehouse-benchmark.jar \
+        -b chbenchmarkForSpark \
+        -c config/spark/spark_iceberg_config.xml \
+        --create=false --load=false --execute=true
+      ```
+   - Hudi
+      ```
+      docker exec -it lakehouse-benchmark \
+        java -jar lakehouse-benchmark.jar \
+        -b chbenchmarkForSpark \
+        -c config/spark/spark_hudi_config.xml \
+        --create=false --load=false --execute=true
+      ```
 ## 测试结果
 测试跑完以后会在 `lakehouse-benchmark` 容器 `/usr/lib/lakehouse-benchmark/` 目录下生成一个 `results` 目录，测试结果都在里面，主要关注两个文件，第一：`xxx.summary.json` 文件， 这里面的 Average Latency 项显示的是本次性能测试的平均响应时间，第二：`xxx.statistic.csv` 文件，里面记录了每个 Query 类型的最大，最小，平均耗时。
