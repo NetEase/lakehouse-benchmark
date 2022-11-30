@@ -65,7 +65,6 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
        java -Dtpcc_name_suffix=_rt -jar lakehouse-benchmark.jar \
        -b chbenchmarkForTrino \
        -c config/trino/presto_hudi_config.xml \
-       -Dtpcc_name_suffix=_rt \
        --create=false --load=false --execute=true
      ```
  - 本 Docker 环境也支持使用 Spark 进行测试：
@@ -120,7 +119,6 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
       java -Dtpcc_name_suffix=_rt -jar lakehouse-benchmark.jar \
       -b chbenchmarkForTrino \
       -c config/trino/presto_hudi_config.xml \
-      -Dtpcc_name_suffix=_rt \
       --create=false --load=false --execute=true
      ```
      
