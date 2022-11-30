@@ -59,22 +59,14 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
        -c config/trino/trino_iceberg_config.xml \
        --create=false --load=false --execute=true
      ```
-   - Hudi  
-   因为 Hudi 的表名带有后缀，Hudi 的测试步骤稍复杂  
-   先进入 benchmark 容器：
+   - Hudi
      ```
-     docker exec -it lakehouse-benchmark /bin/bash 
-     ``` 
-     声明表后缀：
-     ```
-     export tpcc_name_suffix=_rt
-     ```
-     执行性能测试：
-     ```
-     java -jar lakehouse-benchmark.jar \
-     -b chbenchmarkForTrino \
-     -c config/trino/presto_hudi_config.xml \
-     --create=false --load=false --execute=true
+     docker exec -it lakehouse-benchmark \
+       java -jar lakehouse-benchmark.jar \
+       -b chbenchmarkForSpark \
+       -c config/spark/spark_hudi_config.xml \
+       -Dtpcc_name_suffix=_rt \
+       --create=false --load=false --execute=true
      ```
  - 本 Docker 环境也支持使用 Spark 进行测试：
    - Arctic
@@ -122,21 +114,15 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
       -c config/trino/trino_iceberg_config.xml \
       --create=false --load=false --execute=true
      ```
-   - Hudi   
-     先进入 benchmark 容器：
+   - Hudi
      ```
-     docker exec -it lakehouse-benchmark /bin/bash 
-     ``` 
-     声明表后缀：
+     docker exec -it lakehouse-benchmark \
+       java -jar lakehouse-benchmark.jar \
+       -b chbenchmarkForSpark \
+       -c config/spark/spark_hudi_config.xml \
+       -Dtpcc_name_suffix=_rt \
+       --create=false --load=false --execute=true
      ```
-     export tpcc_name_suffix=_rt
-     ```
-     执行性能测试：
-     ```
-     java -jar lakehouse-benchmark.jar \
-     -b chbenchmarkForTrino \
-     -c config/trino/presto_hudi_config.xml \
-     --create=fal
      
  - 也可以使用 Spark ：
    - Arctic
