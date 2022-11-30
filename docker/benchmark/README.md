@@ -63,8 +63,8 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
      ```
      docker exec -it lakehouse-benchmark \
        java -jar lakehouse-benchmark.jar \
-       -b chbenchmarkForSpark \
-       -c config/spark/spark_hudi_config.xml \
+       -b chbenchmarkForTrino \
+       -c config/trino/presto_hudi_config.xml \
        -Dtpcc_name_suffix=_rt \
        --create=false --load=false --execute=true
      ```
@@ -117,11 +117,11 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
    - Hudi
      ```
      docker exec -it lakehouse-benchmark \
-      java -jar lakehouse-benchmark.jar \
-      -b chbenchmarkForSpark \
-      -c config/spark/spark_hudi_config.xml \
-      -Dtpcc_name_suffix=_rt \
-      --create=false --load=false --execute=true
+       java -jar lakehouse-benchmark.jar \
+       -b chbenchmarkForTrino \
+       -c config/trino/presto_hudi_config.xml \
+       -Dtpcc_name_suffix=_rt \
+       --create=false --load=false --execute=true
      ```
      
  - 也可以使用 Spark ：
