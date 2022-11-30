@@ -19,8 +19,6 @@ USER root
 
 RUN yum install -y wget
 
-USER trino:trino
-
 WORKDIR /usr/lib/trino/plugin/arctic
 
 RUN wget https://github.com/NetEase/arctic/releases/download/${ARCTIC_RELEASE}/trino-arctic-${ARCTIC_VERSION}.tar.gz \

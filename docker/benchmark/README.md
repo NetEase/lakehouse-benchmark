@@ -40,7 +40,7 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
      -sinkDatabase [arctic/iceberg/hudi]
    ```
    上述命令需要选择 sinkType 及 sinkDatabase 参数，命令行参数的具体说明请参考 [lakehouse-benchmark-ingestion](https://github.com/NetEase/lakehouse-benchmark-ingestion)。  
-   可以通过宿主机上的 `localhost:8081` 页面打开 [Flink Web UI](localhost:8081)，观察数据同步情况。  
+   可以通过宿主机上的 `localhost:8081` 页面打开 [Flink Web UI](http://localhost:8081)，观察数据同步情况。  
    观察 Flink Web UI ，通过 source 算子的 Records Sent 指标观察数据同步的情况，当该指标不再增加时，表示全量数据同步完成。
  - 等 lakehouse-benchmark-ingestion 容器同步完数据以后，保留此窗口以便后续使用以及观察日志。再新建一个窗口执行命令进入lakehouse-benchmark 容器，进行静态数据查询性能测试，推荐使用 Trino 进行测试：
    - Arctic
@@ -65,6 +65,7 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
        java -jar lakehouse-benchmark.jar \
        -b chbenchmarkForTrino \
        -c config/trino/presto_hudi_config.xml \
+       -Dtpcc_name_suffix=_rt \
        --create=false --load=false --execute=true
      ```
  - 本 Docker 环境也支持使用 Spark 进行测试：
@@ -84,14 +85,8 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
        -c config/spark/spark_iceberg_config.xml \
        --create=false --load=false --execute=true
      ```
-   - Hudi
-     ```
-     docker exec -it lakehouse-benchmark \
-       java -jar lakehouse-benchmark.jar \
-       -b chbenchmarkForSpark \
-       -c config/spark/spark_hudi_config.xml \
-       --create=false --load=false --execute=true
-     ```
+   - Hudi（暂不支持）
+
       
  - 上述测试的是静态数据，数据中不包含 update，delete，如果想测试动态数据需要边向 Mysql 造数据边测试查询，
    进入 lakehouse-benchmark 容器执行命令向 Mysql 里生产增量数据，这些数据会通过已经运行的数据同步工具源源不断写入数据湖：
@@ -125,8 +120,10 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
       java -jar lakehouse-benchmark.jar \
       -b chbenchmarkForTrino \
       -c config/trino/presto_hudi_config.xml \
+      -Dtpcc_name_suffix=_rt \
       --create=false --load=false --execute=true
      ```
+     
  - 也可以使用 Spark ：
    - Arctic
       ```
@@ -144,13 +141,6 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
         -c config/spark/spark_iceberg_config.xml \
         --create=false --load=false --execute=true
       ```
-   - Hudi
-      ```
-      docker exec -it lakehouse-benchmark \
-        java -jar lakehouse-benchmark.jar \
-        -b chbenchmarkForSpark \
-        -c config/spark/spark_hudi_config.xml \
-        --create=false --load=false --execute=true
-      ```
+   - Hudi（暂不支持）
 ## 测试结果
 测试跑完以后会在 `lakehouse-benchmark` 容器 `/usr/lib/lakehouse-benchmark/` 目录下生成一个 `results` 目录，测试结果都在里面，主要关注两个文件，第一：`xxx.summary.json` 文件， 这里面的 Average Latency 项显示的是本次性能测试的平均响应时间，第二：`xxx.statistic.csv` 文件，里面记录了每个 Query 类型的最大，最小，平均耗时。

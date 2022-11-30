@@ -2,7 +2,8 @@
   <configuration default="false" name="chbenchmark - trino" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.oltpbenchmark.DBWorkload" />
     <module name="oltpbench2" />
-    <option name="PROGRAM_PARAMETERS" value="-b chbenchmarkForTrino -c config/trino/sample_chbenchmark_config.xml --create=false --load=false --execute=true" />
+    <option name="PROGRAM_PARAMETERS" value="-b chbenchmarkForTrino -c config/trino/trino_chbenchmark_config.xml --create=false --load=false --execute=true" />
+    <option name="VM_PARAMETERS" value="-Dtpcc_name_suffix=_rt" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.oltpbenchmark.*" />
