@@ -33,9 +33,6 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Payment extends TPCCProcedure {
-
-    private static AtomicInteger atomicInteger = new AtomicInteger(TPCCConfig.configDistPerWhse * TPCCConfig.configCustPerDist * 2 + 1);
-
     private static final Logger LOG = LoggerFactory.getLogger(Payment.class);
 
     public SQLStmt payUpdateWhseSQL = new SQLStmt(
@@ -97,8 +94,8 @@ public class Payment extends TPCCProcedure {
 
     public SQLStmt payInsertHistSQL = new SQLStmt(
             "INSERT INTO " + TPCCConstants.TABLENAME_HISTORY +
-                    " (H_ADD_PRI_ID,H_C_D_ID, H_C_W_ID, H_C_ID, H_D_ID, H_W_ID, H_DATE, H_AMOUNT, H_DATA) " +
-                    " VALUES (?,?,?,?,?,?,?,?,?)");
+                    " (H_C_D_ID, H_C_W_ID, H_C_ID, H_D_ID, H_W_ID, H_DATE, H_AMOUNT, H_DATA) " +
+                    " VALUES (?,?,?,?,?,?,?,?)");
 
     public SQLStmt customerByNameSQL = new SQLStmt(
             "SELECT C_FIRST, C_MIDDLE, C_ID, C_STREET_1, C_STREET_2, C_CITY, " +
@@ -272,15 +269,14 @@ public class Payment extends TPCCProcedure {
             }
             String h_data = w_name + "    " + d_name;
 
-            payInsertHist.setInt(1, atomicInteger.getAndIncrement());
-            payInsertHist.setInt(2, customerDistrictID);
-            payInsertHist.setInt(3, customerWarehouseID);
-            payInsertHist.setInt(4, c.c_id);
-            payInsertHist.setInt(5, districtID);
-            payInsertHist.setInt(6, w_id);
-            payInsertHist.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
-            payInsertHist.setDouble(8, paymentAmount);
-            payInsertHist.setString(9, h_data);
+            payInsertHist.setInt(1, customerDistrictID);
+            payInsertHist.setInt(2, customerWarehouseID);
+            payInsertHist.setInt(3, c.c_id);
+            payInsertHist.setInt(4, districtID);
+            payInsertHist.setInt(5, w_id);
+            payInsertHist.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            payInsertHist.setDouble(7, paymentAmount);
+            payInsertHist.setString(8, h_data);
             payInsertHist.executeUpdate();
 
             //conn.commit();
