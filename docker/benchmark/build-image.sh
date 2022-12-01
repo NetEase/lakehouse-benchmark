@@ -103,4 +103,11 @@ ${BUILD_CMD} \
   --tag arctic163/benchmark-trino:${BENCHMARK_VERSION} \
   "${SELF_DIR}/images" $@
 
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --build-arg PRESTO_VERSION=${PRESTO_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-presto.Dockerfile" \
+  --tag arctic163/benchmark-presto:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
 

@@ -60,7 +60,7 @@ services:
       - metastore
 
   presto:
-    image: ahanaio/prestodb-sandbox:0.274
+    image: arctic163/benchmark-presto:${BENCHMARK_VERSION}
     container_name: presto
     hostname: presto
     volumes:
