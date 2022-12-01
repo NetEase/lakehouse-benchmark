@@ -84,7 +84,14 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
        -c config/spark/spark_iceberg_config.xml \
        --create=false --load=false --execute=true
      ```
-   - Hudi（暂不支持）
+   - Hudi
+     ```
+     docker exec -it lakehouse-benchmark \
+      java -Dtpcc_name_suffix=_rt -jar lakehouse-benchmark.jar \
+        -b chbenchmarkForSpark \
+        -c config/spark/spark_hudi_config.xml \
+        --create=false --load=false --execute=true
+     ```
 
       
  - 上述测试的是静态数据，数据中不包含 update，delete，如果想测试动态数据需要边向 Mysql 造数据边测试查询，
@@ -139,6 +146,13 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
         -c config/spark/spark_iceberg_config.xml \
         --create=false --load=false --execute=true
       ```
-   - Hudi（暂不支持）
+   - Hudi
+     ```
+     docker exec -it lakehouse-benchmark \
+      java -Dtpcc_name_suffix=_rt -jar lakehouse-benchmark.jar \
+        -b chbenchmarkForSpark \
+        -c config/spark/spark_hudi_config.xml \
+        --create=false --load=false --execute=true
+     ```
 ## 测试结果
 测试跑完以后会在 `lakehouse-benchmark` 容器 `/usr/lib/lakehouse-benchmark/` 目录下生成一个 `results` 目录，测试结果都在里面，主要关注两个文件，第一：`xxx.summary.json` 文件， 这里面的 Average Latency 项显示的是本次性能测试的平均响应时间，第二：`xxx.statistic.csv` 文件，里面记录了每个 Query 类型的最大，最小，平均耗时。
