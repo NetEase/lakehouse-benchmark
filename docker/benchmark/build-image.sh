@@ -80,7 +80,7 @@ ${BUILD_CMD} \
 ${BUILD_CMD} \
   --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
   --file "${SELF_DIR}/images/benchmark-lakehouse-ingestion.Dockerfile" \
-  --tag arctic163/benchmark-lakehouse-ingestion:${BENCHMARK_VERSION} \
+  --tag arctic163/lakehouse-benchmark-ingestion:${BENCHMARK_VERSION} \
   "${SELF_DIR}/images" $@
 
 ${BUILD_CMD} \
@@ -101,6 +101,13 @@ ${BUILD_CMD} \
   --build-arg ARCTIC_RELEASE=${ARCTIC_RELEASE} \
   --file "${SELF_DIR}/images/benchmark-trino.Dockerfile" \
   --tag arctic163/benchmark-trino:${BENCHMARK_VERSION} \
+  "${SELF_DIR}/images" $@
+
+${BUILD_CMD} \
+  --build-arg BENCHMARK_VERSION=${BENCHMARK_VERSION} \
+  --build-arg PRESTO_VERSION=${PRESTO_VERSION} \
+  --file "${SELF_DIR}/images/benchmark-presto.Dockerfile" \
+  --tag arctic163/benchmark-presto:${BENCHMARK_VERSION} \
   "${SELF_DIR}/images" $@
 
 

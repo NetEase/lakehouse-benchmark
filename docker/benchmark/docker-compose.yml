@@ -60,7 +60,7 @@ services:
       - metastore
 
   presto:
-    image: ahanaio/prestodb-sandbox:0.274
+    image: arctic163/benchmark-presto:${BENCHMARK_VERSION}
     container_name: presto
     hostname: presto
     volumes:
@@ -110,9 +110,9 @@ services:
     stdin_open: true
 
   lakehouse-benchmark-ingestion:
-    image: arctic163/benchmark-lakehouse-ingestion:${BENCHMARK_VERSION}
-    container_name: benchmark-lakehouse-ingestion
-    hostname: benchmark-lakehouse-ingestion
+    image: arctic163/lakehouse-benchmark-ingestion:${BENCHMARK_VERSION}
+    container_name: lakehouse-benchmark-ingestion
+    hostname: lakehouse-benchmark-ingestion
     privileged: true
     volumes:
       - ./hive:/tmp/hive/warehouse
