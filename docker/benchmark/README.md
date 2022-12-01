@@ -32,7 +32,7 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
    
  - 使用如下命令开启数据同步程序，将数据库的数据实时同步到数据湖
    ```
-   docker exec -it benchmark-lakehouse-ingestion \
+   docker exec -it lakehouse-benchmark-ingestion \
      java -cp lakehouse-benchmark-ingestion-1.0-SNAPSHOT.jar \
      com.netease.arctic.benchmark.ingestion.MainRunner \
      -confDir /usr/lib/lakehouse_benchmark_ingestion/conf \
