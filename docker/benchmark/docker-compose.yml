@@ -110,7 +110,7 @@ services:
     stdin_open: true
 
   lakehouse-benchmark-ingestion:
-    image: arctic163/benchmark-lakehouse-ingestion:${BENCHMARK_VERSION}
+    image: arctic163/lakehouse-benchmark-ingestion:${BENCHMARK_VERSION}
     container_name: benchmark-lakehouse-ingestion
     hostname: benchmark-lakehouse-ingestion
     privileged: true
