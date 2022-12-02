@@ -29,7 +29,7 @@
     <works>
         <work>
             <!--            需要测试至少10min左右-->
-            <time>1800</time>
+            <time>600</time>
 
 <!--            <rate bench="tpcc">2000</rate>-->
             <rate bench="tpcc">unlimited</rate>

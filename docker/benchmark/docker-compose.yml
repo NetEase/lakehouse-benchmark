@@ -36,7 +36,10 @@ services:
     hostname: ams
     volumes:
       - ./arctic:/tmp/arctic/warehouse
+      - ./hive:/tmp/hive/warehouse
       - ./images/ams-config/arctic-config.yaml:/opt/arctic/conf/config.yaml
+      - ./images/ams-config/ams-init.sql:/opt/arctic/conf/derby/ams-init.sql
+      - ./images/ams-config/config.sh:/opt/arctic/bin/config.sh
     ports:
       - 1630:1630
       - 1260:1260
