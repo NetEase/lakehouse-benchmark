@@ -30,7 +30,7 @@
 
         <!-- A Basic WorkPhase for Mixed Workloads -->
         <work>
-            <time>120</time>
+            <time>600</time>
 
             <!-- Note: The rate can be set to UNLIMITED or DISABLED -->
             <rate>200</rate>
