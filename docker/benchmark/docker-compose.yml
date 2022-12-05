@@ -27,6 +27,7 @@ services:
       - ./images/hive-config/core-site.xml:/etc/hadoop/conf/core-site.xml
       - ./images/hive-config/hive-site.xml:/etc/hive/conf/hive-site.xml
       - ./hive:/tmp/hive/warehouse
+    command: ["./wait-for-it.sh", "mysql:3306", "--strict", "--", "/opt/hive/bin/hive", "--service", "metastore"]
     depends_on:
       - mysql
 
@@ -87,6 +88,7 @@ services:
       - ./arctic:/tmp/arctic/warehouse
       - ./images/hive-config/hive-site.xml:/opt/spark/conf/hive-site.xml
       - ./images/spark-config/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "bash", "-c", "/opt/spark/sbin/start-thriftserver.sh && tail -f /dev/null"]
     ports:
       - 10000:10000
     depends_on:
