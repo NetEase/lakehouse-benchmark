@@ -26,3 +26,7 @@ RUN wget https://github.com/NetEase/arctic/releases/download/${ARCTIC_RELEASE}/t
     && rm -f trino-arctic-${ARCTIC_VERSION}.tar.gz  \
     && mv trino-arctic-${ARCTIC_VERSION}/lib/* . \
     && rm -rf trino-arctic-${ARCTIC_VERSION}
+
+WORKDIR /
+COPY scripts/wait-for-it.sh /
+RUN chmod a+x ./wait-for-it.sh

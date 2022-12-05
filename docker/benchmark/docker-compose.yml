@@ -57,6 +57,7 @@ services:
       - ./images/trino-presto-config/local_catalog.properties:/etc/trino/catalog/local_catalog.properties
       - ./images/trino-presto-config/iceberg.properties:/etc/trino/catalog/iceberg.properties
       - ./images/trino-presto-config/delta-lake.properties:/etc/trino/catalog/delta-lake.properties
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "/usr/lib/trino/bin/run-trino"]
     ports:
       - 9001:8080
     depends_on:
@@ -70,6 +71,7 @@ services:
     volumes:
       - ./hive:/tmp/hive/warehouse
       - ./images/trino-presto-config/hudi.properties:/opt/presto-server/etc/catalog/hudi.properties
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "/bin/sh", "-c", "./bin/launcher"]
     ports:
       - 9002:8080
     depends_on:
