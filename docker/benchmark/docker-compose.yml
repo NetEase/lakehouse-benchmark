@@ -27,6 +27,7 @@ services:
       - ./images/hive-config/core-site.xml:/etc/hadoop/conf/core-site.xml
       - ./images/hive-config/hive-site.xml:/etc/hive/conf/hive-site.xml
       - ./hive:/tmp/hive/warehouse
+    command: ["./wait-for-it.sh", "mysql:3306", "--strict", "--", "/opt/hive/bin/hive", "--service", "metastore"]
     depends_on:
       - mysql
 
@@ -56,6 +57,7 @@ services:
       - ./images/trino-presto-config/local_catalog.properties:/etc/trino/catalog/local_catalog.properties
       - ./images/trino-presto-config/iceberg.properties:/etc/trino/catalog/iceberg.properties
       - ./images/trino-presto-config/delta-lake.properties:/etc/trino/catalog/delta-lake.properties
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "/usr/lib/trino/bin/run-trino"]
     ports:
       - 9001:8080
     depends_on:
@@ -69,6 +71,7 @@ services:
     volumes:
       - ./hive:/tmp/hive/warehouse
       - ./images/trino-presto-config/hudi.properties:/opt/presto-server/etc/catalog/hudi.properties
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "/bin/sh", "-c", "./bin/launcher"]
     ports:
       - 9002:8080
     depends_on:
@@ -87,6 +90,7 @@ services:
       - ./arctic:/tmp/arctic/warehouse
       - ./images/hive-config/hive-site.xml:/opt/spark/conf/hive-site.xml
       - ./images/spark-config/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "bash", "-c", "/opt/spark/sbin/start-thriftserver.sh && tail -f /dev/null"]
     ports:
       - 10000:10000
     depends_on:

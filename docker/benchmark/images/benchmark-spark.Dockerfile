@@ -11,10 +11,6 @@ ARG SCALA_BINARY_VERSION
 
 ENV SPARK_HOME=/opt/spark
 
-RUN apt update && \
-    apt-get install -y default-mysql-client && \
-    apt-get clean
-
 RUN wget ${APACHE_MIRROR}/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz && \
     tar -xzf spark-${SPARK_VERSION}-bin-hadoop3.2.tgz -C /opt && \
     ln -s /opt/spark-${SPARK_VERSION}-bin-hadoop3.2 ${SPARK_HOME} && \
@@ -26,10 +22,8 @@ RUN wget https://github.com/NetEase/arctic/releases/download/${ARCTIC_RELEASE}/a
 
 RUN mkdir -p -m 777 /tmp/hive
 RUN mkdir -p -m 777 /tmp/arctic
-WORKDIR ${SPARK_HOME}
-COPY scripts/benchmark-spark-entrypoint.sh ${SPARK_HOME}
-RUN chmod a+x ${SPARK_HOME}/benchmark-spark-entrypoint.sh
 
-CMD ["bash","-c","/opt/spark/benchmark-spark-entrypoint.sh && tail -f /dev/null"]
+COPY scripts/wait-for-it.sh /
+RUN chmod a+x /wait-for-it.sh
 
 

@@ -32,4 +32,5 @@ RUN set -x && \
     mkdir ${HIVE_HOME}/auxlib && \
     wget -q https://github.com/NetEase/lakehouse-benchmark-ingestion/releases/download/1.0/hudi-hadoop-mr-bundle-0.11.1.jar -P ${HIVE_HOME}/auxlib
 
-ENTRYPOINT ["/opt/hive/bin/hive", "--service", "metastore"]
+COPY scripts/wait-for-it.sh /
+RUN chmod a+x /wait-for-it.sh
