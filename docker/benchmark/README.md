@@ -40,8 +40,11 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
      -sinkDatabase [arctic/iceberg/hudi]
    ```
    上述命令需要选择 sinkType 及 sinkDatabase 参数，命令行参数的具体说明请参考 [lakehouse-benchmark-ingestion](https://github.com/NetEase/lakehouse-benchmark-ingestion)。  
-   可以通过宿主机上的 `localhost:8081` 页面打开 [Flink Web UI](http://localhost:8081)，观察数据同步情况。  
+   可以通过宿主机上的 `localhost:8081` 页面打开 [Flink Web UI](http://localhost:8081)，观察数据同步情况。
    观察 Flink Web UI ，通过 source 算子的 Records Sent 指标观察数据同步的情况，当该指标不再增加时，表示全量数据同步完成。
+   
+   如果需要测试带 optimizing 的性能可以， 通过 `localhost:1630` 打开ams，然后创建一个 optimizer group 名称为 `default` 的合并任务即可。 具体操作细节参见 [Arctic-Optimize](https://arctic.netease.com/ch/)
+
  - 等 lakehouse-benchmark-ingestion 容器同步完数据以后，保留此窗口以便后续使用以及观察日志。再新建一个窗口执行命令进入lakehouse-benchmark 容器，进行静态数据查询性能测试，推荐使用 Trino 进行测试：
    - Arctic
      ```
@@ -156,3 +159,6 @@ Docker 的全套 Benchmark 容器只支持单机版本，主要是为了让用�
      ```
 ## 测试结果
 测试跑完以后会在 `lakehouse-benchmark` 容器 `/usr/lib/lakehouse-benchmark/` 目录下生成一个 `results` 目录，测试结果都在里面，主要关注两个文件，第一：`xxx.summary.json` 文件， 这里面的 Average Latency 项显示的是本次性能测试的平均响应时间，第二：`xxx.statistic.csv` 文件，里面记录了每个 Query 类型的最大，最小，平均耗时。
+
+## 注意
+Docker 镜像的一些数据是保存在物理机的 {shell_home}/arctic 和 {shell_home}/hive 目录下，如果重建 ams 需要删除这两个目录。
