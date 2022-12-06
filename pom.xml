@@ -157,10 +157,10 @@
 
         <dependency>
             <groupId>Impala</groupId>
-            <artifactId>ImpalaJDBC41</artifactId>
-            <version>2.6.12.1013</version>
+            <artifactId>ImpalaJDBC42</artifactId>
+            <version>2.6.29.1035</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/ImpalaJDBC41.jar</systemPath>
+            <systemPath>${project.basedir}/lib/ImpalaJDBC42.jar</systemPath>
         </dependency>
 
     </dependencies>
@@ -191,7 +191,7 @@
                             <mainClass>com.oltpbenchmark.DBWorkload</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>lib/ImpalaJDBC41.jar</Class-Path>
+                            <Class-Path>lib/ImpalaJDBC42.jar</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>

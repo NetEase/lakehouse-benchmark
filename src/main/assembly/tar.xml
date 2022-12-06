@@ -38,7 +38,7 @@
             <outputDirectory>lib</outputDirectory>
         </file>
         <file>
-            <source>${project.basedir}/lib/ImpalaJDBC41.jar</source>
+            <source>${project.basedir}/lib/ImpalaJDBC42.jar</source>
             <outputDirectory>lib</outputDirectory>
         </file>
     </files>
