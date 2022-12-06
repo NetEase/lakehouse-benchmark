@@ -156,6 +156,14 @@
         </dependency>
 
         <dependency>
+            <groupId>Impala</groupId>
+            <artifactId>ImpalaJDBC42</artifactId>
+            <version>2.6.29.1035</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ImpalaJDBC42.jar</systemPath>
+        </dependency>
+        
+         <dependency>
             <groupId>com.facebook.presto</groupId>
             <artifactId>presto-jdbc</artifactId>
             <version>0.274.1-SNAPSHOT</version>
@@ -190,6 +198,7 @@
                             <mainClass>com.oltpbenchmark.DBWorkload</mainClass>
                         </manifest>
                         <manifestEntries>
+                            <Class-Path>lib/ImpalaJDBC42.jar</Class-Path>
                             <Class-Path>lib/presto-jdbc-0.274.1-SNAPSHOT.jar</Class-Path>
                         </manifestEntries>
                     </archive>

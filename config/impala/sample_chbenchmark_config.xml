@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<parameters>
+
+    <!-- Connection details -->
+    <type>IMPALA</type>
+    <driver>com.cloudera.impala.jdbc.Driver</driver>
+    <url>jdbc:impala://sloth-commerce-test2.jd.163.org:21050/arctic_impala_test;</url>
+    <username>hadoop</username>
+<!--    <password>benchmark</password>-->
+    <isolation>TRANSACTION_READ_UNCOMMITTED</isolation>
+    <batchsize>128</batchsize>
+
+    <!-- Scale factor is the number of warehouses in TPCC -->
+    <scalefactor>1</scalefactor>
+
+    <!-- The workload -->
+
+    <!-- Number of terminal per workload -->
+    <terminals>10</terminals>
+
+    <!-- Extra Features (Commented Out) -->
+    <!-- Can be workload-specific -->
+    <!-- <terminals bench="tpcc">2</terminals> -->
+
+    <!-- Workload-specific options a marked with @bench=[workload_name] -->
+    <!-- Workload-specific number of terminals -->
+    <!-- <terminals bench="chbenchmark">2</terminals> -->
+
+    <works>
+
+        <!-- A Basic WorkPhase for Mixed Workloads -->
+        <work>
+            <time>1800</time>
+
+            <!-- Note: The rate can be set to UNLIMITED or DISABLED -->
+            <rate>200</rate>
+            <rate bench="tpcc">disabled</rate>
+            <rate bench="chbenchmark4impala">unlimited</rate>
+            <!-- Need to Specify transaction weights for each workload .. Otherwise the number of fields won't match -->
+            <weights bench="tpcc">45,43,4,4,4</weights>
+            <weights bench="chbenchmark4impala">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+        </work>
+
+    </works>
+
+
+    <!-- CH specific -->
+    <transactiontypes bench="chbenchmark4impala">
+        <transactiontype>
+            <name>Q1</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q2</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q3</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q4</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q5</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q6</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q7</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q8</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q9</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q10</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q11</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q12</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q13</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q14</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q16</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q17</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q18</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q19</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q20</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q21</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q22</name>
+        </transactiontype>
+    </transactiontypes>
+
+    <!-- TPCC specific -->
+    <transactiontypes bench="tpcc">
+        <transactiontype>
+            <name>NewOrder</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Payment</name>
+        </transactiontype>
+        <transactiontype>
+            <name>OrderStatus</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Delivery</name>
+        </transactiontype>
+        <transactiontype>
+            <name>StockLevel</name>
+        </transactiontype>
+    </transactiontypes>
+</parameters>
