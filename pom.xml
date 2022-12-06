@@ -162,7 +162,14 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ImpalaJDBC42.jar</systemPath>
         </dependency>
-
+        
+         <dependency>
+            <groupId>com.facebook.presto</groupId>
+            <artifactId>presto-jdbc</artifactId>
+            <version>0.274.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/presto-jdbc-0.274.1-SNAPSHOT.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
@@ -192,6 +199,7 @@
                         </manifest>
                         <manifestEntries>
                             <Class-Path>lib/ImpalaJDBC42.jar</Class-Path>
+                            <Class-Path>lib/presto-jdbc-0.274.1-SNAPSHOT.jar</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>

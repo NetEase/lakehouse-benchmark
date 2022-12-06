@@ -92,7 +92,7 @@ CREATE TABLE customer (
 );
 
 CREATE TABLE history (
-    h_add_pri_id   int           NOT NULL,
+    h_add_pri_id   int     NOT NULL AUTO_INCREMENT,
     h_c_id   int           NOT NULL,
     h_c_d_id int           NOT NULL,
     h_c_w_id int           NOT NULL,

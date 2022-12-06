@@ -22,6 +22,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.order_line;
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.stock;
+import static com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.TableNames.supplier;
+
 public class Q15 extends GenericQuery {
 
     public final SQLStmt query_stmt = new SQLStmt(
@@ -30,10 +34,10 @@ public class Q15 extends GenericQuery {
                 " su_address, \n" +
                 " su_phone, \n" +
                 " total_revenue \n" +
-                "FROM supplier, (\n" +
+                "FROM " + supplier() + ", (\n" +
                 "  SELECT mod((s_w_id * s_i_id),10000) as supplier_no, \n" +
                 "         sum(ol_amount) as total_revenue \n" +
-                "  FROM order_line, stock \n" +
+                "  FROM " + order_line() + ", " + stock() + " \n" +
                 "  WHERE ol_i_id = s_i_id \n" +
                 "        AND ol_supply_w_id = s_w_id \n" +
                 "        AND ol_delivery_d >= TIMESTAMP '2007-01-02 00:00:00.000000' \n" +
@@ -46,7 +50,7 @@ public class Q15 extends GenericQuery {
                 "       (\n" +
                 "          SELECT mod((s_w_id * s_i_id),10000) as supplier_no, \n" +
                 "                 sum(ol_amount) as total_revenue \n" +
-                "          FROM order_line, stock \n" +
+                "          FROM " + order_line() + ", " + stock() + " \n" +
                 "          WHERE ol_i_id = s_i_id \n" +
                 "                AND ol_supply_w_id = s_w_id \n" +
                 "                AND ol_delivery_d >= TIMESTAMP '2007-01-02 00:00:00.000000' \n" +

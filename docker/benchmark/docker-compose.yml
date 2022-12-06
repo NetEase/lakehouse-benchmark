@@ -5,46 +5,20 @@ services:
   mysql:
     container_name: mysql
     hostname: mysql
-    image: mysql:5.7
+    image: mysql:8.0
     command: mysqld --max-connections=500
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_ROOT_HOST: "%"
-      MYSQL_DATABASE: oltpbench
+      MYSQL_DATABASE: metastore
     ports:
       - "3306:3306"
-
-  mysql-ui:
-    container_name: mysql-ui
-    hostname: mysql-ui
-    image: phpmyadmin/phpmyadmin:latest
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: password
-    links:
-      - mysql
-    ports:
-      - "8080:80"
-
-  postgres:
-    image: postgres:12
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: metastore
-    container_name: postgres
-    hostname: postgres
-    ports:
-      - 5432:5432
     volumes:
-      - ./images/hive-config/hive-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-schema-2.3.0.postgres.sql
-      - ./images/hive-config/hive-txn-schema-2.3.0.postgres.sql:/docker-entrypoint-initdb.d/hive-txn-schema-2.3.0.postgres.sql
-
+      - ./images/scripts/hive-schema-2.3.0.mysql.sql:/docker-entrypoint-initdb.d/hive-schema-2.3.0.mysql.sql
+      - ./images/scripts/hive-txn-schema-2.3.0.mysql.sql:/docker-entrypoint-initdb.d/hive-txn-schema-2.3.0.mysql.sql
 
   metastore:
-    image: arctic163/benchmark-hive
+    image: arctic163/benchmark-metastore:${BENCHMARK_VERSION}
     container_name: metastore
     hostname: metastore
     ports:
@@ -53,15 +27,20 @@ services:
       - ./images/hive-config/core-site.xml:/etc/hadoop/conf/core-site.xml
       - ./images/hive-config/hive-site.xml:/etc/hive/conf/hive-site.xml
       - ./hive:/tmp/hive/warehouse
+    command: ["./wait-for-it.sh", "mysql:3306", "--strict", "--", "/opt/hive/bin/hive", "--service", "metastore"]
     depends_on:
-      - postgres
+      - mysql
 
   ams:
-    image: arctic163/ams
+    image: arctic163/benchmark-ams:${BENCHMARK_VERSION}
     container_name: ams
     hostname: ams
     volumes:
       - ./arctic:/tmp/arctic/warehouse
+      - ./hive:/tmp/hive/warehouse
+      - ./images/ams-config/arctic-config.yaml:/opt/arctic/conf/config.yaml
+      - ./images/ams-config/ams-init.sql:/opt/arctic/conf/derby/ams-init.sql
+      - ./images/ams-config/config.sh:/opt/arctic/bin/config.sh
     ports:
       - 1630:1630
       - 1260:1260
@@ -69,12 +48,16 @@ services:
     stdin_open: true
 
   trino:
-    image: arctic163/benchmark-trino
+    image: arctic163/benchmark-trino:${BENCHMARK_VERSION}
     container_name: trino
     hostname: trino
     volumes:
       - ./arctic:/tmp/arctic/warehouse
       - ./hive:/tmp/hive/warehouse
+      - ./images/trino-presto-config/local_catalog.properties:/etc/trino/catalog/local_catalog.properties
+      - ./images/trino-presto-config/iceberg.properties:/etc/trino/catalog/iceberg.properties
+      - ./images/trino-presto-config/delta-lake.properties:/etc/trino/catalog/delta-lake.properties
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "/usr/lib/trino/bin/run-trino"]
     ports:
       - 9001:8080
     depends_on:
@@ -82,11 +65,13 @@ services:
       - metastore
 
   presto:
-    image: arctic163/benchmark-presto
+    image: arctic163/benchmark-presto:${BENCHMARK_VERSION}
     container_name: presto
     hostname: presto
     volumes:
       - ./hive:/tmp/hive/warehouse
+      - ./images/trino-presto-config/hudi.properties:/opt/presto-server/etc/catalog/hudi.properties
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "/bin/sh", "-c", "./bin/launcher"]
     ports:
       - 9002:8080
     depends_on:
@@ -94,12 +79,18 @@ services:
       - metastore
 
   spark:
-    image: arctic163/benchmark_spark
+    image: arctic163/benchmark-spark:${BENCHMARK_VERSION}
     container_name: spark
     hostname: spark
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
     volumes:
       - ./hive:/tmp/hive/warehouse
       - ./arctic:/tmp/arctic/warehouse
+      - ./images/hive-config/hive-site.xml:/opt/spark/conf/hive-site.xml
+      - ./images/spark-config/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+    command: ["./wait-for-it.sh", "metastore:9083", "--strict", "--", "bash", "-c", "/opt/spark/sbin/start-thriftserver.sh && tail -f /dev/null"]
     ports:
       - 10000:10000
     depends_on:
@@ -107,10 +98,38 @@ services:
       - metastore
 
   lakehouse-benchmark:
-    image: arctic163/lakehouse-benchmark
+    image: arctic163/lakehouse-benchmark:${BENCHMARK_VERSION}
     container_name: lakehouse-benchmark
     hostname: lakehouse-benchmark
+    volumes:
+      - ./images/benchmark-config/sample_chbenchmark_config.xml:/usr/lib/lakehouse-benchmark/config/mysql/sample_chbenchmark_config.xml
+      - ./images/benchmark-config/presto_hudi_config.xml:/usr/lib/lakehouse-benchmark/config/trino/presto_hudi_config.xml
+      - ./images/benchmark-config/trino_arctic_config.xml:/usr/lib/lakehouse-benchmark/config/trino/trino_arctic_config.xml
+      - ./images/benchmark-config/trino_iceberg_config.xml:/usr/lib/lakehouse-benchmark/config/trino/trino_iceberg_config.xml
+      - ./images/benchmark-config/spark_arctic_config.xml:/usr/lib/lakehouse-benchmark/config/spark/spark_arctic_config.xml
+      - ./images/benchmark-config/spark_hudi_config.xml:/usr/lib/lakehouse-benchmark/config/spark/spark_hudi_config.xml
+      - ./images/benchmark-config/spark_iceberg_config.xml:/usr/lib/lakehouse-benchmark/config/spark/spark_iceberg_config.xml
     depends_on:
       - trino
+      - mysql
+      - spark
     tty: true
     stdin_open: true
+
+  lakehouse-benchmark-ingestion:
+    image: arctic163/lakehouse-benchmark-ingestion:${BENCHMARK_VERSION}
+    container_name: lakehouse-benchmark-ingestion
+    hostname: lakehouse-benchmark-ingestion
+    privileged: true
+    volumes:
+      - ./hive:/tmp/hive/warehouse
+      - ./arctic:/tmp/arctic/warehouse
+      - ./images/ingestion-config/ingestion-conf.yaml:/usr/lib/lakehouse_benchmark_ingestion/conf/ingestion-conf.yaml
+    depends_on:
+      - mysql
+      - ams
+      - metastore
+    tty: true
+    stdin_open: true
+    ports:
+      - "8081:8081"

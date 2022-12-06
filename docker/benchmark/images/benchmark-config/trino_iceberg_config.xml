@@ -2,10 +2,10 @@
 <parameters>
 
     <!-- Connection details -->
-    <type>HIVE</type>
-    <driver>org.apache.hive.jdbc.HiveDriver</driver>
-    <url>jdbc:hive2://spark:10000/local_catalog</url>
-    <username>hdfs</username>
+    <type>TRINO</type>
+    <driver>io.trino.jdbc.TrinoDriver</driver>
+    <url>jdbc:trino://trino:8080/iceberg/iceberg</url>
+    <username>benchmark</username>
 <!--    <password>benchmark</password>-->
     <isolation>TRANSACTION_READ_UNCOMMITTED</isolation>
     <batchsize>128</batchsize>
@@ -30,22 +30,22 @@
 
         <!-- A Basic WorkPhase for Mixed Workloads -->
         <work>
-            <time>1800</time>
+            <time>600</time>
 
             <!-- Note: The rate can be set to UNLIMITED or DISABLED -->
             <rate>200</rate>
             <rate bench="tpcc">disabled</rate>
-            <rate bench="chbenchmarkForSpark">unlimited</rate>
+            <rate bench="chbenchmarkForTrino">unlimited</rate>
             <!-- Need to Specify transaction weights for each workload .. Otherwise the number of fields won't match -->
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmarkForSpark">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
 
     </works>
 
 
     <!-- CH specific -->
-    <transactiontypes bench="chbenchmarkForSpark">
+    <transactiontypes bench="chbenchmarkForTrino">
         <transactiontype>
             <name>Q1</name>
         </transactiontype>
@@ -90,6 +90,9 @@
         </transactiontype>
         <transactiontype>
             <name>Q15</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Q16</name>
         </transactiontype>
         <transactiontype>
             <name>Q17</name>

@@ -4,7 +4,7 @@
     <!-- Connection details -->
     <type>TRINO</type>
     <driver>io.trino.jdbc.TrinoDriver</driver>
-    <url>jdbc:trino://ams:1260/local_catalog/benchmark</url>
+    <url>jdbc:trino://trino:8080/local_catalog/arctic</url>
     <username>benchmark</username>
 <!--    <password>benchmark</password>-->
     <isolation>TRANSACTION_READ_UNCOMMITTED</isolation>
@@ -30,7 +30,7 @@
 
         <!-- A Basic WorkPhase for Mixed Workloads -->
         <work>
-            <time>1800</time>
+            <time>120</time>
 
             <!-- Note: The rate can be set to UNLIMITED or DISABLED -->
             <rate>200</rate>
@@ -38,7 +38,7 @@
             <rate bench="chbenchmarkForTrino">unlimited</rate>
             <!-- Need to Specify transaction weights for each workload .. Otherwise the number of fields won't match -->
             <weights bench="tpcc">45,43,4,4,4</weights>
-            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
+            <weights bench="chbenchmarkForTrino">3, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</weights>
         </work>
 
     </works>

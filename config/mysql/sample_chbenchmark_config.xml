@@ -4,7 +4,7 @@
     <!-- Connection details -->
     <type>MYSQL</type>
     <driver>com.mysql.cj.jdbc.Driver</driver>
-    <url>jdbc:mysql://mysql:3306/oltpbench?rewriteBatchedStatements=true</url>
+    <url>jdbc:mysql://mysql:3306/oltpbench?rewriteBatchedStatements=true&amp;createDatabaseIfNotExist=true</url>
 <!--    <url>jdbc:mysql://hz11-trino-arctic-0.jd.163.org:3306/icebergdb10w?rewriteBatchedStatements=true</url>-->
     <username>root</username>
     <password>password</password>
@@ -12,11 +12,11 @@
     <batchsize>128</batchsize>
 
     <!-- Scale factor is the number of warehouses in TPCC -->
-    <scalefactor>2</scalefactor>
+    <scalefactor>1</scalefactor>
 
     <!-- The workload -->
     <!-- Number of terminal per workload -->
-    <terminals>4</terminals>
+    <terminals>1</terminals>
 
     <!-- Extra Features (Commented Out) -->
     <!-- Can be workload-specific -->

@@ -1,0 +1,36 @@
+#请填写source端数据库的连接信息
+source.type: mysql
+source.database.name: oltpbench
+source.username: root
+source.password: password
+source.hostname: mysql
+source.port: 3306
+
+#读取source端数据的可选配置项
+source.table.name: *
+#source.scan.startup.mode: initial
+#source.parallelism: 4
+
+#根据选择的sink端数据湖format的类型，填写相应信息
+#如果你选择了Arctic，请填写以下信息
+arctic.metastore.url: thrift://ams:1260/local_catalog
+##Arctic相关的可选配置项
+arctic.optimize.group.name: default
+
+#如果你选择了Iceberg，请填写以下信息
+iceberg.uri: thrift://metastore:9083
+iceberg.warehouse: /tmp/hive/warehouse
+#iceberg相关的可选配置项
+#iceberg.catalog-type: hive
+
+#如果你选择了Hudi，请填写以下信息
+hudi.catalog.path: /tmp/hive/warehouse
+hudi.hive_sync.metastore.uris: thrift://metastore:9083
+
+#hudi相关的可选配置项
+hudi.hive_sync.enable: true
+hudi.table.type: MERGE_ON_READ
+hudi.read.tasks: 4
+hudi.write.tasks: 4
+hudi.compaction.tasks: 4
+hudi.compaction.trigger.strategy: num_or_time

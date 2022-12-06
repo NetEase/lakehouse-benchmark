@@ -34,7 +34,7 @@
             <outputDirectory></outputDirectory>
         </file>
         <file>
-            <source>${project.basedir}/presto-client/presto-jdbc-0.274.1-SNAPSHOT.jar</source>
+            <source>${project.basedir}/lib/presto-jdbc-0.274.1-SNAPSHOT.jar</source>
             <outputDirectory>lib</outputDirectory>
         </file>
         <file>

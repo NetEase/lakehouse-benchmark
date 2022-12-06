@@ -2,7 +2,9 @@ package com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark;
 
 public class TableNames {
 
-  private static final String suffix = System.getenv("tpcc_name_suffix") == null ? "" : System.getenv("tpcc_name_suffix");
+  private static final String suffix = System.getenv("tpcc_name_suffix") == null ?
+      System.getProperty("tpcc_name_suffix") == null ? "" : System.getProperty("tpcc_name_suffix") :
+      System.getenv("tpcc_name_suffix");
 
   private static final String prefix = System.getenv("tpcc_name_prefix") == null ? "" : System.getenv("tpcc_name_prefix");
 

@@ -12,20 +12,21 @@
 
 FROM trinodb/trino:380
 
-ARG ARCTIC_VERSION=0.3.2-SNAPSHOT
-ARG RELEASE=v0.3.2-rc1
+ARG ARCTIC_VERSION
+ARG ARCTIC_RELEASE
+
+USER root
+
+RUN yum install -y wget
 
 WORKDIR /usr/lib/trino/plugin/arctic
-#You need to download trino-arctic-${ARCTIC_VERSION}.tar.gz by yourself and put it in the trino-presto-config directory
-COPY trino-presto-config/trino-arctic-${ARCTIC_VERSION}.tar.gz ./
 
-RUN tar -zxvf trino-arctic-${ARCTIC_VERSION}.tar.gz  \
+RUN wget https://github.com/NetEase/arctic/releases/download/${ARCTIC_RELEASE}/trino-arctic-${ARCTIC_VERSION}.tar.gz \
+    && tar -zxvf trino-arctic-${ARCTIC_VERSION}.tar.gz  \
     && rm -f trino-arctic-${ARCTIC_VERSION}.tar.gz  \
     && mv trino-arctic-${ARCTIC_VERSION}/lib/* . \
     && rm -rf trino-arctic-${ARCTIC_VERSION}
 
-COPY trino-presto-config/local_catalog.properties /etc/trino/catalog/
-COPY trino-presto-config/iceberg.properties /etc/trino/catalog/
-COPY trino-presto-config/delta-lake.properties /etc/trino/catalog/
-
-
+WORKDIR /
+COPY scripts/wait-for-it.sh /
+RUN chmod a+x ./wait-for-it.sh
