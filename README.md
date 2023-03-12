@@ -1,5 +1,5 @@
 # Ch-Benchmark for Data-Lake
-Forked from https://github.com/timveil-cockroach/oltpbench with a focus on chbenchmark for data lake. Support Trino and Presto.
+Base on https://github.com/timveil-cockroach/oltpbench with a focus on chbenchmark for data lake. Support Trino and Presto.
 ## Data Lake Ch-Benchmarks
 ![design](benchmark-design.png)
 
