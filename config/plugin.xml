@@ -19,4 +19,5 @@
     <plugin name="chbenchmarkForTrino">com.oltpbenchmark.benchmarks.chbenchmarkForTrino.chbenchmark.CHBenCHmark</plugin>
     <plugin name="chbenchmarkForSpark">com.oltpbenchmark.benchmarks.chbenchmarkForSpark.chbenchmark.CHBenCHmark</plugin>
     <plugin name="chbenchmark4impala">com.oltpbenchmark.benchmarks.chbenchmark4impala.CHBenCHmark</plugin>
+    <plugin name="chbenchmark4doris">com.oltpbenchmark.benchmarks.chbenchmark4doirs.CHBenCHmark</plugin>
 </plugins>
